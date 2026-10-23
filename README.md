@@ -13,6 +13,10 @@ starts in plain words and lets the reader drill down to the mechanics and the or
 - One shareable URL per milestone (for example `/hopfield/`).
 - Static site: no server. Targets Vercel and GitHub Pages.
 
+v1.1 adds one lesson screen, `/lesson/hopfield/`: the Hopfield network and its energy valley on a
+single dark screen, with the card's text in tabs and every milestone in a strip
+(`docs/concept-lesson-layout.md`, ADR-004).
+
 The project brief is `docs/brief.md` (copied from the starter kit, 2026-10-22). To publish the
 site, follow `docs/deploy.md`.
 

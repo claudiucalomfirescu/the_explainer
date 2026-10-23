@@ -171,3 +171,47 @@ and accessibility tests carry a planted-failure control inside the test itself.
 35. [INT] Final acceptance (prax-app Step 8): both builds green, every REQ demonstrated,
     `prax_check` with no FAIL, changelog and status updated.
     - Status: done (2026-10-23)
+
+## Phase 6: The Hopfield lesson screen (REQ-19, REQ-20, REQ-21)
+
+36. [TEST] Unit: the valley loop (REQ-20)
+    - `tests/unit/valley.test.js`: the loop has 50 states; positions 0, 16, 25 and 41 are H, T,
+      inverse H and inverse T, each at energy -312; `loopEnergy` equals the model's energy at every
+      position; `placeOf` returns the position for every loop state and null for a state off the
+      loop; for every way to flip 5 of the 16 neurons where H and T differ (several seeds each),
+      recall restores H, the energy never rises, and every intermediate state is on the loop.
+    - Status: done (2026-10-23)
+37. [IMPL] `src/lib/valley.ts`
+    - Requirement IDs: REQ-20. Implements: Task 36.
+    - Status: done (2026-10-23)
+38. [TEST] Browser: the lesson screen (REQ-19)
+    - `tests/e2e/lesson.spec.js`: `/lesson/hopfield/` has one h1 with the milestone title, its own
+      title and share tags; the Idea tab shows the milestone's idea text and the other three tabs
+      its came-from notes, people and paper title; six steps with the milestone's headings, and
+      choosing one shows its body text; the strip has sixteen milestones in seven eras, Hopfield
+      marked current and the others linking to `/<slug>/`; links to `/` and `/hopfield/`; the
+      Hopfield card links to the lesson; `/lesson/perceptron/` is a 404.
+    - Status: done (2026-10-23)
+39. [TEST] Browser: the lesson's network and valley (REQ-20)
+    - Same file: 25 neuron buttons start as H; clicking one flips its `aria-pressed`; Damage 5 flips
+      exactly five; Recall restores H, the readout reaching energy -312, and the readout never
+      rises between steps; the ball's position matches the readout's loop position; Show the
+      energy hides and shows the track.
+    - Status: done (2026-10-23)
+40. [TEST] Browser: the lesson for everyone (REQ-21)
+    - Same file: keyboard alone reaches and operates a neuron, a tab, a step and Recall with a
+      visible focus ring; axe reports no serious or critical issue before and after Recall; at
+      375 px no sideways page scroll and the strip scrolls inside itself; with reduced motion,
+      Recall finishes at once. `tests/e2e/hosts.spec.js` adds the lesson URL to the crawl on both
+      builds (no error response, no console error).
+    - Status: done (2026-10-23)
+41. [IMPL] Route group: move the site chrome and card pages into `app/(timeline)/` (ADR-004)
+    - Requirement IDs: REQ-19. Implements: Task 38 (the lesson renders without the site chrome),
+      with every existing test still passing unchanged.
+    - Status: done (2026-10-23)
+42. [IMPL] The lesson page, its components and `lesson.css`; the link from the Hopfield card
+    - Requirement IDs: REQ-19, REQ-20, REQ-21. Implements: Tasks 38, 39, 40.
+    - Status: done (2026-10-23)
+43. [INT] Phase 6 integration: Vitest, ESLint, Playwright root and `test:hosts` green; new mutation
+    probes caught; screenshots of the lesson at 1440 px and 375 px.
+    - Status: done (2026-10-23)

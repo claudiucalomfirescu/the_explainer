@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import type { Content } from "@/lib/content";
+import { hasLesson } from "@/lib/lessons";
 import { ERAS, type Milestone } from "@/lib/schema";
 import { Deeper } from "./deeper";
 import { Person } from "./person";
@@ -105,6 +106,13 @@ export function MilestoneCard({ milestone: m, content }: { milestone: Milestone;
 
       <section data-part="deeper" aria-labelledby={id("deeper")} className="mt-10">
         <Deeper steps={m.deeper.steps} visual={m.deeper.visual} headingId={id("deeper")} />
+        {hasLesson(m.slug) && (
+          <p className="mt-4">
+            <Link data-testid="lesson-link" href={`/lesson/${m.slug}/`} className="font-medium text-primary underline underline-offset-4">
+              Open the lesson: the network and its energy valley on one screen
+            </Link>
+          </p>
+        )}
       </section>
 
       <nav aria-label="Previous and next milestone" className="mt-12 flex flex-wrap justify-between gap-4 border-t border-border pt-6">

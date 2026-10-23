@@ -4,12 +4,15 @@ since: 2026-10-23
 priority: medium
 health: green
 one_liner: Public web timeline of the ideas behind today's LLMs, 1943 to 2022, where each milestone opens a card from plain words to the paper.
-phase: Built, tested on both hosts and handed over; waiting for the owner to deploy
+phase: v1.1 lesson screen built and gated (Phase 6); v1 handed over, waiting for the owner to deploy
 roadmap:
+  - Show the lesson to the owner, then decide which milestone gets the next lesson
+  - Make the lesson's readout announce only flips and the end of a recall, not every check
   - Owner creates the repository, turns on GitHub Pages and connects Vercel (docs/deploy.md)
   - Compare the two hosts on speed and share previews, then pick one address to share
   - Use the 2024 Nobel Prize in Physics (Hopfield and Hinton) as the hook for the launch post
 done_recently:
+  - 2026-10-23 · Hopfield lesson screen at /lesson/hopfield/ built, tested on both hosts, gated
   - 2026-10-23 · Both hosts tested, deploy steps written, independent review findings fixed
   - 2026-10-23 · Interactive Hopfield network and the transformer animation added to their cards
   - 2026-10-23 · Twelve approved portraits added with photographer and licence credits
@@ -179,14 +182,43 @@ nice-to-have); every finding was verified and acted on except F-18, which was al
 
 ### Final acceptance (prax-app Step 8)
 
-- Every requirement REQ-1 to REQ-18 has its proof in this file.
+- Every requirement REQ-1 to REQ-18 has its proof in this file (REQ-19 to REQ-21: Phase 6).
 - Last full run, 2026-10-23: Vitest 70/70, Python 12/12, ESLint clean, Playwright root 46/46,
   `test:hosts` 2/2 and 2/2, mutation probes 60 of 60 CAUGHT.
 - `prax_check`: run at this boundary (result in the run ledger row below).
 - Shipped means built, tested and handed over. **Deploying is the owner's step** (`docs/deploy.md`);
   nothing has been pushed or deployed.
 
+## Phase 6 (v1.1, run 202610231721)
+
+Gated complete 2026-10-23 17:42.
+
+### Phase 6 — definition of done (checked 2026-10-23 17:42)
+
+| Item | Result | Evidence |
+|---|---|---|
+| All Phase 6 test tasks written and passing | pass | Vitest 77/77 (`tests/unit/valley.test.js`, 7); Playwright root 60/60 (`tests/e2e/lesson.spec.js`, 14); `test:hosts` 2/2 and 2/2 with the lesson in the crawl |
+| All impl tasks complete; every existing test still passes unchanged | pass | the 46 earlier browser tests and 70 unit tests pass with no edit; the host crawl was extended, not changed (declared in the report) |
+| Code reviewed with mutation probes | pass | `sessions/review-report-202610231742.md` (20 probes CAUGHT; 2 blockers fixed; 3 declared check corrections) |
+| Architecture integrity preserved | pass | matches `docs/architecture.md` lesson section and ADR-004; `lib/lessons.ts` added to the file list |
+| Status updated; REQ-19 to REQ-21 marked with proof | pass | this file |
+
+### Requirement proof (Phase 6)
+
+| ID | Proof | State |
+|---|---|---|
+| REQ-19 | `tests/e2e/lesson.spec.js` "the screen" (title, share tags, no site chrome, four tabs from the milestone file, six steps, sixteen milestones in seven eras with Hopfield current, links both ways, 404 for other slugs) | proven |
+| REQ-20 | `tests/unit/valley.test.js` (loop, landmarks, energies by model and formula, place of every state, all 4,368 Damage-5 cases restore H with energy never rising and every state on the loop); `tests/e2e/lesson.spec.js` "the network and the valley" | proven |
+| REQ-21 | `tests/e2e/lesson.spec.js` "the lesson for everyone" (keyboard and focus rings, announced text, axe before and after a recall, 375 px, reduced motion); `tests/e2e/hosts.spec.js` (both builds, no error response or console error) | proven locally; not yet on a live host |
+
+Screenshots: `reports/screenshots-lesson-202610231742/`.
+
 ## Known issues
+
+- The lesson's readout is announced on every neuron checked during a recall; it should announce
+  only flips and the end (review finding 3).
+- Since ADR-004 the 404 page shows without the site header and timeline; it keeps its own link back
+  to the start.
 
 - Three of the independent reviewer's probes have no standing probe yet: an attribute-only
   hydration mismatch, the Space key on a root build, and a skipped heading level (moderate in axe).
@@ -224,3 +256,11 @@ None.
 | 202610221749 | Phase 4 gate | 202610230849 | pass (4 of 4 items) | docs/status.md#phase-4 |
 | 202610221749 | S7 Phase 5 built, independent review, fixes | 202610230923 | pass (60 of 60 probes; 19 of 20 review findings fixed, 1 known) | sessions/review-report-202610230923.md |
 | 202610221749 | Phase 5 gate and final acceptance | 202610230924 | pass (4 of 4 items; every REQ proven) | docs/status.md#phase-5-and-final-acceptance |
+| 202610231721 | S1 project readiness (re-run, feature change: lesson screen) | 202610231722 | n/a | docs/concept-lesson-layout.md |
+| 202610231721 | S2-S3 spec REQ-19 to REQ-21 | 202610231723 | pass (tier 3, 1 cycle, 0 fixes) | sessions/review-report-202610231723.md |
+| 202610231721 | S4 plan Phase 6 | 202610231723 | pass (tier 3, 1 cycle, 0 fixes) | sessions/review-report-202610231723.md |
+| 202610231721 | S5 architecture lesson section and ADR-004 | 202610231723 | pass (tier 3, 1 cycle, 2 fixes) | sessions/review-report-202610231723.md |
+| 202610231721 | S6 tasks 36-43 | 202610231723 | pass (tier 3, 1 cycle, 0 fixes) | sessions/review-report-202610231723.md |
+| 202610231721 | S7 cross-document coherence | 202610231723 | pass (0 fixes) | sessions/review-report-202610231723.md |
+| 202610231721 | S7 Phase 6 built and reviewed | 202610231742 | pass (20 probes, 2 blockers fixed, 3 declared check corrections, tasks re-gated) | sessions/review-report-202610231742.md |
+| 202610231721 | Phase 6 gate | 202610231742 | pass (5 of 5 items) | docs/status.md#phase-6-v11-run-202610231721 |

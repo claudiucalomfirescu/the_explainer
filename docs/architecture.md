@@ -16,11 +16,13 @@ public/
   explainers/transformer/       copied transformer explainer (Phase 4, ADR-003)
 src/
   app/
-    layout.tsx                  html shell, fonts, site header, the Timeline (persists across pages)
-    page.tsx                    "/"  → card of the first milestone
-    [slug]/page.tsx             "/<slug>/" → card of that milestone; generateStaticParams
+    layout.tsx                  html shell, fonts, site metadata
+    (timeline)/layout.tsx       site header, the Timeline (persists across pages), footer (ADR-004)
+    (timeline)/page.tsx         "/"  → card of the first milestone
+    (timeline)/[slug]/page.tsx  "/<slug>/" → card of that milestone; generateStaticParams
+    (timeline)/template.tsx     re-mounts the card on each navigation so Motion can animate it
+    lesson/[slug]/page.tsx      "/lesson/hopfield/" → the lesson screen (Phase 6, see below)
     og/[file]/route.tsx         share images /og/<slug>.png, written at build time (see below)
-    template.tsx                re-mounts the card on each navigation so Motion can animate it
   components/
     timeline.tsx                client: eras, markers (next/link), active state, sideways scroll
     milestone-card.tsx          server: the five parts in order
@@ -135,6 +137,44 @@ navigation (REQ-2 asks for exactly one).
 - Transformer: `public/explainers/transformer/index.html` is a copy of
   `Test/transformer-explainer/index.html` (a 632 KB single file with no outside references). The
   card shows a button; clicking it inserts an `<iframe>` whose `src` goes through `asset()`.
+
+## Lesson screen (Phase 6: REQ-19, REQ-20, REQ-21, ADR-004)
+
+```text
+src/app/
+  layout.tsx                    document shell only: html, body, fonts, site metadata
+  (timeline)/layout.tsx         skip link, header, Timeline, main, footer (moved here, ADR-004)
+  (timeline)/page.tsx           "/"            (moved, URL unchanged)
+  (timeline)/[slug]/page.tsx    "/<slug>/"     (moved, URL unchanged)
+  (timeline)/template.tsx       the card's entrance animation (moved)
+  lesson/[slug]/page.tsx        "/lesson/hopfield/": server page; reads the milestone, renders Lesson
+  lesson/lesson.css             the lesson's design tokens and layout, scoped under .lesson
+src/components/lesson/
+  lesson.tsx                    server: the screen's frame (rail, header, strip) and grid areas
+  lesson-stage.tsx              client: network, track, toolbar, and the steps list with its
+                                readout (one state object; renders two grid areas, stage and steps)
+  lesson-tabs.tsx               client: the four text tabs (the panel's upper grid area)
+src/lib/valley.ts               pure: the 50-state loop, its energies, a state's place on it
+src/lib/lessons.ts              the one list of milestones with a lesson (route params, card link)
+```
+
+- **Model.** The stage uses `lib/hopfield.ts` (`train`, `energy`, `updateNeuron`, `rng`) with H and
+  T stored, and `lib/valley.ts` for the track: `loopState(t)` (the state at loop position t),
+  `loopEnergy(t)`, `placeOf(state)` (the loop position, or null off the loop). Recall is driven one
+  neuron at a time from the stage with a timer, so each step can be shown; the order is a seeded
+  shuffle per sweep, as in `recall`.
+- **Content.** Tabs and steps read the Hopfield milestone through `getMilestone`, so the lesson and
+  the card cannot disagree. The strip reads `getContent().milestones` and links every other
+  milestone to `/<slug>/` with `next/link`.
+- **Design.** Plain CSS in `lesson.css` under a `.lesson` root, from the settled mock-up's tokens:
+  graphite `#23252b`, signal blue `#5f9dff`, the soft glow as two `drop-shadow` filters on lit
+  parts only. Mono labels from `next/font` (JetBrains Mono), body in Geist. The card pages' theme
+  is untouched.
+- **Layout.** Wide screens: a grid of rail, stage and a 500 px panel over a strip, filling the
+  viewport. Below 900 px the areas stack and the page scrolls; the strip scrolls sideways inside
+  itself.
+- **Accessibility.** Neurons are `<button aria-pressed>`; the step text sits in an `aria-live`
+  region; tabs use the ARIA tab pattern; reduced motion makes recall instant.
 
 ## Testing (all phases)
 

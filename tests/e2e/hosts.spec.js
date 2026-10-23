@@ -58,6 +58,24 @@ test("every milestone page, image, share image and the animation load without a 
   await expect(page).toHaveURL(new URL("word2vec/", base).href);
   await expect(page.locator(`${sel.card} h1`)).toContainText("Word2vec");
 
+  // The lesson screen loads under the base path, its links stay under it, and its share tags point
+  // to this host (REQ-21, Task 40).
+  await page.goto("lesson/hopfield/");
+  await expect(page.locator('[data-testid="lesson"] h1')).toBeVisible();
+  // The inspiration links live in a tab; open it so they are in the crawl (declared correction,
+  // Phase 6 report: probe W14 showed the tab's links were never checked).
+  await page.getByRole("tab", { name: "Where it came from" }).click();
+  await expect(page.getByRole("tabpanel").locator('a[href^="/"]').first()).toBeVisible();
+  const lessonHrefs = await page.locator('[data-testid="lesson"] a[href^="/"]').evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+  expect(lessonHrefs.length).toBeGreaterThan(15);
+  for (const h of lessonHrefs) expect(h.startsWith(base.pathname), `lesson: link ${h}`).toBe(true);
+  expect(await page.locator('meta[property="og:url"]').getAttribute("content")).toBe(new URL("lesson/hopfield/", base).href);
+  const lessonOg = await page.locator('meta[property="og:image"]').getAttribute("content");
+  expect((await request.get(lessonOg)).status(), "lesson: og:image").toBe(200);
+  await page.locator('[data-testid="lesson-tools"]').getByRole("button", { name: "Damage 5", exact: true }).click();
+  await page.locator('[data-testid="lesson-tools"]').getByRole("button", { name: "Recall", exact: true }).click();
+  await expect(page.locator('[data-testid="readout"]')).toHaveAttribute("data-running", "false", { timeout: 20_000 });
+
   // The transformer animation loads under the base path.
   await page.goto("transformer/");
   await page.locator('[data-testid="deeper-trigger"]').click();

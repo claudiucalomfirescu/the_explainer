@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chosen style: soft glow</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&family=Instrument+Serif&display=swap">
+<style>
+/* ---------- the board itself (neutral, so it does not compete with the options) ---------- */
+:root { --board-bg:#e9e8e4; --board-ink:#222; --board-mute:#6b6b66; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--board-bg); color:var(--board-ink); font:14px/1.45 Inter, system-ui, sans-serif; padding:20px 20px 40px; }
+.board-head { max-width:1900px; margin:0 auto 14px; display:flex; justify-content:space-between; align-items:baseline; gap:20px; flex-wrap:wrap; }
+.board-head h1 { font-size:18px; margin:0; font-weight:600; }
+.board-head p { margin:0; color:var(--board-mute); max-width:900px; }
+.cols { max-width:1900px; margin:0 auto; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:18px; }
+.cols.solo { grid-template-columns:minmax(0,1fr); }
+.cols.solo .col:not(.big) { display:none; }
+.col h2 { font-size:15px; margin:0 0 2px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.col h2 button { font:inherit; font-size:12px; font-weight:500; border:1px solid #bbb; background:#fff; border-radius:6px; padding:3px 9px; cursor:pointer; }
+.col .what { margin:0 0 8px; color:var(--board-mute); font-size:12.5px; min-height:3.9em; }
+.viewport { position:relative; width:100%; overflow:hidden; border-radius:10px; box-shadow:0 1px 0 #0001, 0 6px 22px #0002; }
+.frame { width:1280px; height:780px; transform-origin:top left; position:absolute; left:0; top:0; }
+.gesture { margin:8px 0 0; font-size:12px; color:var(--board-mute); }
+
+/* ---------- the screen: identical structure in every column ---------- */
+.scr { width:100%; height:100%; display:grid; grid-template-columns:var(--side-w) minmax(0,1fr) 500px; grid-template-rows:76px minmax(0,1fr) 128px;
+  grid-template-areas:"side head head" "side stage panel" "side strip strip"; background:var(--bg); color:var(--ink); font-family:var(--body-font); }
+.scr .side { grid-area:side; background:var(--side-bg); border-right:1px solid var(--rule); display:flex; flex-direction:column; align-items:stretch; padding:14px 8px; gap:4px; transition:width .2s; }
+.scr .side button { all:unset; cursor:pointer; display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:var(--radius); color:var(--ink-soft); font:500 13px var(--ui-font); white-space:nowrap; overflow:hidden; }
+.scr .side button:hover { background:var(--hover); color:var(--ink); }
+.scr .side button.on { color:var(--accent); }
+.scr .side svg { width:20px; height:20px; flex:none; stroke:currentColor; fill:none; stroke-width:1.6; }
+.scr .side .lab { opacity:0; transition:opacity .15s; }
+.scr.open .side .lab { opacity:1; }
+.scr .head { grid-area:head; display:flex; align-items:center; gap:28px; padding:0 28px; border-bottom:1px solid var(--rule); }
+.scr .brand { font:var(--title-font); letter-spacing:var(--title-track); color:var(--ink); }
+.scr .brand small { display:block; font:400 12px var(--ui-font); color:var(--ink-soft); letter-spacing:.04em; margin-top:2px; }
+.scr .year { margin-left:auto; font:var(--year-font); color:var(--accent); line-height:1; }
+.scr .prog { font:500 12px var(--ui-font); color:var(--ink-soft); display:grid; gap:6px; min-width:150px; }
+.scr .prog .bar { height:4px; border-radius:2px; background:var(--rule); overflow:hidden; } .scr .prog .bar i { display:block; height:100%; width:31%; background:var(--accent); }
+.scr .stage { grid-area:stage; position:relative; display:grid; place-items:center; background:var(--stage-bg); overflow:hidden; }
+.scr .stage svg.fig { width:92%; max-height:92%; }
+.scr .tools { position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:4px; padding:4px; border-radius:calc(var(--radius) + 4px); background:var(--panel-bg); border:1px solid var(--rule); box-shadow:var(--shadow); }
+.scr .tools button { all:unset; cursor:pointer; white-space:nowrap; padding:6px 11px; border-radius:var(--radius); font:500 12px var(--ui-font); color:var(--ink-soft); }
+.scr .tools button:hover { color:var(--ink); background:var(--hover); } .scr .tools button.on { color:var(--accent); background:var(--accent-soft); }
+.scr .stage .cap { position:absolute; top:16px; left:20px; right:20px; font:var(--caption-font); color:var(--ink-soft); max-width:520px; }
+.scr .panel { grid-area:panel; border-left:1px solid var(--rule); background:var(--panel-bg); display:grid; grid-template-rows:auto minmax(0,1fr) auto; min-height:0; }
+.scr .tabs { display:flex; gap:2px; padding:12px 14px 0; border-bottom:1px solid var(--rule); }
+.scr .tabs button { all:unset; cursor:pointer; padding:8px 10px; font:500 12px var(--ui-font); color:var(--ink-soft); border-bottom:2px solid transparent; letter-spacing:var(--tab-track); text-transform:var(--tab-case); }
+.scr .tabs button.on { color:var(--ink); border-color:var(--accent); }
+.scr .tab-body { padding:16px 18px; overflow:auto; font-size:13.5px; }
+.scr .tab-body h3 { font:var(--h3-font); margin:0 0 8px; color:var(--ink); }
+.scr .tab-body p { margin:0 0 10px; color:var(--ink); }
+.scr .tab-body .src { font:var(--caption-font); color:var(--ink-soft); }
+.scr .tab-body .card { border:1px solid var(--rule); border-radius:var(--radius); padding:10px 12px; margin-bottom:8px; background:var(--card-bg); }
+.scr .steps { border-top:1px solid var(--rule); padding:12px 14px 14px; }
+.scr .steps .t { font:600 11px var(--ui-font); letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:flex; justify-content:space-between; }
+.scr .steps ol { list-style:none; margin:0; padding:0; display:grid; gap:2px; }
+.scr .steps li button { all:unset; cursor:pointer; display:flex; gap:10px; width:100%; padding:6px 8px; border-radius:var(--radius); font:13px var(--body-font); color:var(--ink); }
+.scr .steps li button b { font:600 11px var(--ui-font); width:20px; height:20px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--rule); color:var(--ink-soft); flex:none; }
+.scr .steps li button:hover { background:var(--hover); }
+.scr .steps li button.on { background:var(--accent-soft); } .scr .steps li button.on b { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+.scr .readout { margin-top:8px; font:500 12px var(--mono-font); color:var(--ink-soft); min-height:1.3em; }
+.scr .strip { grid-area:strip; border-top:1px solid var(--rule); display:flex; gap:10px; padding:12px 16px; overflow:hidden; background:var(--strip-bg); }
+.scr .era { display:flex; flex-direction:column; gap:6px; flex:none; }
+.scr .era > span { font:600 10.5px var(--ui-font); letter-spacing:.1em; text-transform:uppercase; color:var(--era); }
+.scr .era .row { display:flex; gap:8px; }
+.scr .ms { all:unset; cursor:pointer; width:128px; height:70px; border:1px solid var(--rule); border-radius:var(--radius); background:var(--card-bg); padding:8px 10px; display:flex; flex-direction:column; justify-content:space-between; position:relative; }
+.scr .ms:hover { border-color:var(--ink-soft); }
+.scr .ms .y { font:var(--ms-year-font); color:var(--era); }
+.scr .ms .n { font:12px/1.25 var(--body-font); color:var(--ink); }
+.scr .ms.on { border-color:var(--era); box-shadow:inset 0 0 0 1px var(--era); background:var(--ms-on-bg); }
+.scr .ms.read::after { content:"\2713"; position:absolute; top:6px; right:8px; font:600 11px var(--ui-font); color:var(--era); }
+
+/* figure parts, coloured per option */
+.fig .link { stroke:var(--fig-line); stroke-width:1; opacity:.0; transition:opacity .25s; }
+.fig .link.show { opacity:.55; } .fig .link.yes { stroke:var(--accent); opacity:.9; }
+.fig .neuron { fill:var(--fig-off); stroke:var(--fig-line); stroke-width:1.2; transition:fill .2s; }
+.fig .neuron.on { fill:var(--fig-on); stroke:var(--fig-on-line); }
+.fig .neuron.check { stroke:var(--accent); stroke-width:3; }
+.fig .curve { fill:none; stroke:var(--fig-line); stroke-width:1.6; }
+.fig .ground { fill:var(--fig-ground); stroke:none; }
+.fig .axis { stroke:var(--fig-faint); stroke-width:1; }
+.fig .flab { font:12px var(--ui-font); fill:var(--ink-soft); }
+.fig .flab.big { font:var(--fig-label-font); fill:var(--ink); }
+.fig .ball { fill:var(--accent); stroke:var(--fig-ball-line); stroke-width:1.5; }
+.fig .plinth { display:var(--plinth); }
+.fig .plinth rect { fill:var(--plinth-fill); stroke:var(--plinth-line); }
+.fig .callout line { stroke:var(--fig-faint); stroke-width:1; } .fig .callout text { font:600 10px var(--ui-font); letter-spacing:.08em; fill:var(--ink-soft); }
+
+/* ---------- option A: archive and lab notebook ---------- */
+.t-notebook { --bg:#f5efe3; --side-bg:#efe7d6; --stage-bg:#f8f3e8 repeating-linear-gradient(0deg, transparent 0 27px, #e4d9c3 27px 28px); --panel-bg:#fbf7ee; --strip-bg:#efe7d6; --card-bg:#fffdf7;
+  --ink:#2a2620; --ink-soft:#7a6f5e; --rule:#d8cdb6; --hover:#e8dfcb; --accent:#2f7d6d; --accent-soft:#2f7d6d1c; --on-accent:#fff; --radius:3px; --shadow:0 1px 0 #d8cdb6;
+  --body-font:'Newsreader', Georgia, serif; --ui-font:'IBM Plex Mono', ui-monospace, monospace; --mono-font:'IBM Plex Mono', monospace;
+  --title-font:600 24px 'Newsreader', serif; --title-track:0; --year-font:400 52px 'Newsreader', serif; --caption-font:italic 14px 'Newsreader', serif;
+  --h3-font:600 18px 'Newsreader', serif; --ms-year-font:500 13px 'IBM Plex Mono', monospace; --fig-label-font:600 22px 'Newsreader', serif; --tab-track:.04em; --tab-case:uppercase;
+  --fig-line:#2a2620; --fig-faint:#b9ab8f; --fig-off:#fffdf7; --fig-on:#2a2620; --fig-on-line:#2a2620; --fig-ground:#e9dfc9; --fig-ball-line:#2a2620;
+  --plinth:none; --plinth-fill:none; --plinth-line:none; --ms-on-bg:#fffdf7; --side-w:58px; }
+.t-notebook .era[data-era="40s"] { --era:#8a5a2b; } .t-notebook .era[data-era="winter"] { --era:#5b6b7a; } .t-notebook .era[data-era="80s"] { --era:#2f7d6d; }
+.t-notebook .era[data-era="90s"] { --era:#7a4f8a; } .t-notebook .era[data-era="deep"] { --era:#b0472e; } .t-notebook .era[data-era="att"] { --era:#2e5aa8; } .t-notebook .era[data-era="scale"] { --era:#6b6b2a; }
+.t-notebook .tab-body .card.index { background:#fffdf7 repeating-linear-gradient(0deg, transparent 0 21px, #e8eef5 21px 22px); border-top:3px solid #c85a54; font-family:'IBM Plex Mono', monospace; font-size:12.5px; }
+
+/* ---------- option B: night instrument ---------- */
+.t-night { --bg:#0c0e0f; --side-bg:#101314; --stage-bg:#0c0e0f; --panel-bg:#131617; --strip-bg:#101314; --card-bg:#15191a;
+  --ink:#e8eaea; --ink-soft:#8b9296; --rule:#262b2e; --hover:#1c2123; --accent:#ff8a1f; --accent-soft:#ff8a1f1f; --on-accent:#111; --radius:10px; --shadow:0 0 0 1px #262b2e;
+  --body-font:'Inter', system-ui, sans-serif; --ui-font:'JetBrains Mono', ui-monospace, monospace; --mono-font:'JetBrains Mono', monospace;
+  --title-font:700 16px 'JetBrains Mono', monospace; --title-track:.16em; --year-font:700 44px 'JetBrains Mono', monospace; --caption-font:12px 'JetBrains Mono', monospace;
+  --h3-font:600 16px 'Inter', sans-serif; --ms-year-font:700 13px 'JetBrains Mono', monospace; --fig-label-font:700 18px 'JetBrains Mono', monospace; --tab-track:.12em; --tab-case:uppercase;
+  --fig-line:#4a5257; --fig-faint:#2b3134; --fig-off:#15191a; --fig-on:#ff8a1f; --fig-on-line:#ffc27a; --fig-ground:#121516; --fig-ball-line:#ffc27a;
+  --plinth:none; --plinth-fill:none; --plinth-line:none; --ms-on-bg:#1b1712; --side-w:58px; --era:#ff8a1f; }
+.t-night .fig .neuron.on, .t-night .fig .ball, .t-night .fig .link.yes { filter:var(--gfilter); }
+.t-night .fig .neuron.on { stroke-width:var(--on-stroke, 1.2); }
+.t-night .stage { background:radial-gradient(ellipse 60% 55% at 50% 52%, var(--halo), transparent 70%), var(--stage-base); }
+.t-night .era > span { color:var(--ink-soft); } .t-night .ms .y { color:var(--ink); } .t-night .ms.on .y { color:var(--accent); } .t-night .ms.read::after { color:var(--accent); }
+.t-night .ms.on { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+.col .chips { display:flex; gap:10px; margin:0 0 8px; font:12px ui-monospace, Menlo, monospace; color:var(--board-mute); flex-wrap:wrap; }
+.col .chips span { display:inline-flex; align-items:center; gap:6px; } .col .chips i { width:14px; height:14px; border-radius:3px; border:1px solid #0003; display:inline-block; }
+.cols { grid-template-columns:minmax(0,1fr); max-width:1400px; } .col h2 button { display:none; }
+
+/* ---------- option C: museum gallery ---------- */
+.t-museum { --bg:#fbfbf9; --side-bg:#fbfbf9; --stage-bg:linear-gradient(#f3f2ee, #fbfbf9 70%); --panel-bg:#ffffff; --strip-bg:#fbfbf9; --card-bg:#ffffff;
+  --ink:#141414; --ink-soft:#757575; --rule:#e6e4df; --hover:#f1f0ec; --accent:#9e2a2b; --accent-soft:#9e2a2b12; --on-accent:#fff; --radius:0px; --shadow:none;
+  --body-font:'Inter', system-ui, sans-serif; --ui-font:'Inter', system-ui, sans-serif; --mono-font:'Inter', sans-serif;
+  --title-font:400 30px 'Instrument Serif', serif; --title-track:0; --year-font:400 64px 'Instrument Serif', serif; --caption-font:13px 'Inter', sans-serif;
+  --h3-font:400 24px 'Instrument Serif', serif; --ms-year-font:400 18px 'Instrument Serif', serif; --fig-label-font:400 24px 'Instrument Serif', serif; --tab-track:.02em; --tab-case:none;
+  --fig-line:#141414; --fig-faint:#c9c6bf; --fig-off:#ffffff; --fig-on:#141414; --fig-on-line:#141414; --fig-ground:#f1f0ec; --fig-ball-line:#141414;
+  --plinth:inline; --plinth-fill:#ffffff; --plinth-line:#dcd9d2; --ms-on-bg:#ffffff; --side-w:58px; --era:#141414; }
+.t-museum .ms { border-width:0 0 1px; } .t-museum .ms.on { box-shadow:inset 0 -2px 0 #9e2a2b; }
+.t-museum .stage .cap { top:auto; bottom:64px; left:auto; right:32px; text-align:right; max-width:300px; border-top:1px solid #141414; padding-top:8px; font-style:normal; }
+.t-museum .tabs button.on { border-color:#141414; }
+</style></head><body>
+<div class="board-head">
+  <h1>Chosen style: signal blue on graphite, soft glow</h1>
+  <p>The settled look from round three (variation 3), with the text panel widened again: 500 px instead of 430. Rounds one to three are in the same folder.</p>
+</div>
+<div class="cols" id="cols"></div>
+<script>
+/* ---------- content (from content/milestones/05-hopfield.json and the milestone list) ---------- */
+const ERAS = [
+  ['40s', '1940s–50s', [[1943, 'The artificial neuron'], [1949, 'Hebbian learning'], [1958, 'The perceptron']]],
+  ['winter', 'First AI winter', [[1969, 'Perceptrons and the first winter']]],
+  ['80s', '1980s revival', [[1982, 'The Hopfield network'], [1985, 'The Boltzmann machine'], [1986, 'Backpropagation']]],
+  ['90s', '1990s: sequences', [[1991, 'Mixture of experts'], [1997, 'LSTM']]],
+  ['deep', 'Deep learning', [[2006, 'Deep belief networks'], [2012, 'AlexNet'], [2013, 'Word2vec']]],
+  ['att', 'Attention', [[2014, 'Attention'], [2017, 'The transformer']]],
+  ['scale', 'Scale', [[2018, 'GPT and scaling laws'], [2022, 'ChatGPT and human feedback']]],
+];
+const TABS = {
+  Idea: `<h3>The Hopfield network: memory as a valley</h3><p>A network that stores memories as stable patterns. Give it a damaged or partial version of a memory and it settles, step by step, back to the complete original.</p>`,
+  'Came from': `<div class="card"><b>Hebbian learning (1949)</b><p class="src">The connection strengths are set with Hebb's rule: neurons that are active together in a memory get a stronger link.</p></div>
+    <div class="card"><b>Physics of disordered magnets</b><p class="src">Hopfield, a physicist, saw that his network behaves like a model of a disordered magnet: it always moves downhill in an energy and comes to rest.</p></div>
+    <div class="card"><b>Earlier memory networks</b><p class="src">Amari (1972) and Little (1974) had studied similar networks; Hopfield's energy picture made them easy to analyse.</p></div>`,
+  Who: `<h3>John Hopfield</h3><p>Physicist at Caltech and Bell Labs who brought the tools of statistical physics to neural networks.</p><p class="src">Shared the 2024 Nobel Prize in Physics with Geoffrey Hinton.</p>`,
+  Paper: `<div class="card index"><b>Neural networks and physical systems with emergent collective computational abilities</b><br>J. J. Hopfield · PNAS 79(8), 2554–2558 · 1982</div><p class="src">An energy that can only fall as neurons update, so the network always settles. Memories are those resting states, about 0.15 per neuron before recall fails.</p>`,
+};
+const STEPS = [
+  ['Neurons and links', 'Each of the 25 neurons is on or off. Every neuron is linked to every other, both ways equally.'],
+  ['Storing a memory', 'Hebb’s rule: two neurons that agree in a pattern get a stronger link. H and T are stored.'],
+  ['Updating one neuron', 'A neuron adds up its links times its neighbours. Positive: on. Negative: off.'],
+  ['Energy only goes down', 'Each update lowers the energy or leaves it. The network has to stop somewhere.'],
+  ['Recall is rolling downhill', 'Start from a damaged H and the network rolls into the H valley.'],
+  ['Limits', 'Store too many letters, more than about 0.15 per neuron, and the valleys merge into blends.'],
+];
+const ICONS = {
+  Eras: '<path d="M3 12h18M7 8v8M12 6v12M17 9v6"/>', People: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5"/>',
+  Papers: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/>', Settings: '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
+  Menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+};
+const OPTIONS = [
+  { name: 'Signal blue on graphite \u00b7 soft glow', accent: '#5f9dff', glow: 2, halo: .06, what: 'Background #23252b, accent #5f9dff, a short soft glow on lit parts, text panel 500 px.' },
+];
+/* derive every token from the graphite background, the accent and the glow level */
+const hx = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mixc = (a, b, t) => '#' + hx(a).map((v, i) => Math.round(v * (1 - t) + hx(b)[i] * t).toString(16).padStart(2, '0')).join('');
+const alpha = (h, a) => h + Math.round(a * 255).toString(16).padStart(2, '0');
+function tokens(o){
+  const bg = '#23252b', ac = o.accent;
+  const gfilter = o.glow === 0 ? 'none' : o.glow === 1 ? `drop-shadow(0 0 2px ${alpha(ac, .8)})` : `drop-shadow(0 0 3px ${ac}) drop-shadow(0 0 6px ${alpha(ac, .3)})`;
+  return { '--bg': bg, '--side-bg': mixc(bg, '#000000', .14), '--stage-base': bg, '--panel-bg': mixc(bg, '#ffffff', .035), '--strip-bg': mixc(bg, '#000000', .14),
+    '--card-bg': mixc(bg, '#ffffff', .05), '--ink': '#eceef0', '--ink-soft': mixc(bg, '#ffffff', .52), '--rule': mixc(bg, '#ffffff', .11), '--hover': mixc(bg, '#ffffff', .07),
+    '--accent': ac, '--accent-soft': alpha(ac, .14), '--on-accent': '#111418', '--gfilter': gfilter, '--halo': alpha(ac, o.halo),
+    '--fig-line': mixc(bg, '#ffffff', .3), '--fig-faint': mixc(bg, '#ffffff', .15), '--fig-off': mixc(bg, '#ffffff', .05),
+    '--fig-on': o.ring ? mixc(bg, ac, .3) : ac, '--fig-on-line': o.ring ? ac : mixc(ac, '#ffffff', .45), '--on-stroke': o.ring ? 2.4 : 1.2,
+    '--fig-ground': mixc(bg, '#ffffff', .04), '--fig-ball-line': mixc(ac, '#ffffff', .45), '--ms-on-bg': mixc(bg, ac, .1), '--era': ac };
+}
+
+
+/* ---------- a 5 x 5 Hopfield network with H and T stored (same rules as the site's widget) ---------- */
+const rows = r => r.join('').split('').map(c => c === '#' ? 1 : -1);
+const H = rows(['#...#', '#...#', '#####', '#...#', '#...#']), T = rows(['#####', '..#..', '..#..', '..#..', '..#..']);
+const W = H.map((_, i) => H.map((_, j) => i === j ? 0 : H[i]*H[j] + T[i]*T[j]));
+const energy = s => -s.reduce((a, si, i) => a + s.reduce((b, sj, j) => b + W[i][j]*si*sj, 0), 0) / 2;
+const DI = H.map((v, i) => v !== T[i] ? i : -1).filter(i => i >= 0);             // the 16 neurons where H and T differ
+const NI = H.map((v, i) => v === T[i] ? i : -1).filter(i => i >= 0);             // the 9 where they agree
+// the loop H -> T -> inverse H -> inverse T -> H (50 states); the curve shows inverse T .. H .. T .. inverse H
+const ringKJ = t => { t = ((t % 50) + 50) % 50; return t <= 16 ? [t, 0] : t <= 25 ? [16, t - 16] : t <= 41 ? [16 - (t - 25), 9] : [0, 9 - (t - 41)]; };
+const ringE = t => { const [k, j] = ringKJ(t), s = H.slice(); for (let a = 0; a < k; a++) s[DI[a]] *= -1; for (let b = 0; b < j; b++) s[NI[b]] *= -1; return energy(s); };
+const T0 = -9, T1 = 25, PROFILE = []; for (let t = T0; t <= T1; t++) PROFILE.push(ringE(t));
+const pxT = t => 384 + (t - T0) * 8, pyE = e => 330 - (e + 312) / 256 * 190;
+
+/* ---------- one screen ---------- */
+function screen(opt, idx){
+  const el = document.createElement('div'); el.className = 'scr ' + opt.cls;
+  const strip = ERAS.map(([k, label, ms]) => `<div class="era" data-era="${k}"><span>${label}</span><div class="row">${ms.map(([y, n]) =>
+    `<button class="ms${y === 1982 ? ' on' : ''}${y < 1982 ? ' read' : ''}" data-y="${y}"><span class="y">${y}</span><span class="n">${n}</span></button>`).join('')}</div></div>`).join('');
+  el.innerHTML = `
+    <nav class="side">${['Menu', 'Eras', 'People', 'Papers', 'Settings'].map(n => `<button data-side="${n}"><svg viewBox="0 0 24 24">${ICONS[n]}</svg><span class="lab">${n === 'Menu' ? 'Collapse' : n}</span></button>`).join('')}</nav>
+    <header class="head"><div class="brand">From neurons to ChatGPT<small>16 ideas behind today's language models</small></div>
+      <div class="prog"><span>5 of 16 read</span><span class="bar"><i></i></span></div><div class="year">1982</div></header>
+    <section class="stage"><div class="cap"></div>${figure()}<div class="tools"><button data-tool="reset">Reset</button><button data-tool="links" class="on">Links</button><button data-tool="energy" class="on">Show the energy</button><button data-tool="damage">Damage 5</button><button data-tool="recall">Recall</button></div></section>
+    <aside class="panel"><div class="tabs">${Object.keys(TABS).map((t, i) => `<button data-tab="${t}"${i ? '' : ' class="on"'}>${t}</button>`).join('')}</div>
+      <div class="tab-body">${TABS.Idea}</div>
+      <div class="steps"><div class="t"><span>Step through it</span><span>6 steps</span></div><ol>${STEPS.map(([h], i) => `<li><button data-step="${i}"><b>${i + 1}</b>${h}</button></li>`).join('')}</ol><div class="readout"></div></div></aside>
+    <footer class="strip">${strip}</footer>`;
+  wire(el);
+  return el;
+}
+function figure(){
+  const cell = 33, gx = 92, gy = 128, cx = i => gx + (i % 5) * cell, cy = i => gy + Math.floor(i / 5) * cell;
+  let links = ''; for (let j = 0; j < 25; j++) if (j !== 12) links += `<line class="link" data-j="${j}" x1="${cx(12)}" y1="${cy(12)}" x2="${cx(j)}" y2="${cy(j)}"/>`;
+  const curve = PROFILE.map((e, n) => `${n ? 'L' : 'M'}${pxT(T0 + n)} ${pyE(e).toFixed(1)}`).join('');
+  return `<svg class="fig" viewBox="0 0 700 430">
+    <g class="plinth"><rect x="40" y="318" width="244" height="112"/><rect x="368" y="342" width="300" height="88"/></g>
+    <g class="links">${links}</g>
+    ${H.map((_, i) => `<circle class="neuron" data-i="${i}" cx="${cx(i)}" cy="${cy(i)}" r="10.5"/>`).join('')}
+    <text class="flab big" x="${gx - 11}" y="56">The network</text><text class="flab" x="${gx - 11}" y="76">25 neurons, 300 links</text>
+    <g class="energyfig"><path class="ground" d="${curve}L${pxT(T1)} 340L${pxT(T0)} 340Z"/><path class="curve" d="${curve}"/><line class="axis" x1="378" y1="340" x2="664" y2="340"/>
+      <text class="flab big" x="390" y="56">The valley</text><text class="flab" x="390" y="76">height = energy</text>
+      <text class="flab big" x="${pxT(0) - 7}" y="366">H</text><text class="flab big" x="${pxT(16) - 7}" y="366">T</text>
+      <text class="flab" x="${pxT(T0) - 6}" y="362">−T</text><text class="flab" x="${pxT(T1) - 12}" y="362">−H</text><text class="flab" x="${pxT(8) - 26}" y="${pyE(ringE(8)) - 14}">the ridge</text>
+      <circle class="ball" cx="${pxT(0)}" cy="${pyE(ringE(0)) - 9}" r="9"/></g>
+  </svg>`;
+}
+function wire(el){
+  const st = { s: H.slice(), timer: 0, links: true, energy: true };
+  const $ = s => el.querySelector(s), $$ = s => [...el.querySelectorAll(s)];
+  const ball = $('.ball'), ns = $$('.neuron'), ro = $('.readout'), cap = $('.stage .cap');
+  const kOf = s => DI.filter(i => s[i] !== H[i]).length;
+  function draw(check = -1){
+    ns.forEach((n, i) => { n.classList.toggle('on', st.s[i] > 0); n.classList.toggle('check', i === check); });
+    const k = kOf(st.s), e = energy(st.s);
+    ball.setAttribute('cx', pxT(k)); ball.setAttribute('cy', (pyE(e) - 9).toFixed(1));
+    ro.textContent = `energy ${e} · ${k} of 16 neurons look like T`;
+  }
+  function showLinks(i, next){ $$('.link').forEach(l => { const j = +l.dataset.j; l.setAttribute('x1', ns[i].getAttribute('cx')); l.setAttribute('y1', ns[i].getAttribute('cy'));
+    l.setAttribute('x2', ns[j === i ? 12 : j].getAttribute('cx')); l.setAttribute('y2', ns[j === i ? 12 : j].getAttribute('cy'));
+    l.classList.toggle('show', st.links); l.classList.toggle('yes', st.links && W[i][j === i ? 12 : j] * st.s[j === i ? 12 : j] * next > 0); }); }
+  function hideLinks(){ $$('.link').forEach(l => l.classList.remove('show', 'yes')); }
+  function damage(n = 5){ clearTimeout(st.timer); const pick = DI.slice().sort(() => Math.random() - .5).slice(0, n); st.s = H.slice(); pick.forEach(i => st.s[i] *= -1); hideLinks(); draw(); }
+  function recall(){ clearTimeout(st.timer); const order = [...Array(25).keys()].sort(() => Math.random() - .5); let k = 0, changed = 0;
+    const tick = () => { if (k >= order.length){ hideLinks(); draw(); if (changed){ k = 0; changed = 0; order.sort(() => Math.random() - .5); } else return; }
+      const i = order[k++], a = W[i].reduce((s, w, j) => s + w * st.s[j], 0), next = a > 0 ? 1 : a < 0 ? -1 : st.s[i];
+      showLinks(i, next); if (next !== st.s[i]){ st.s = st.s.slice(); st.s[i] = next; changed++; draw(i); st.timer = setTimeout(tick, 420); } else { draw(i); st.timer = setTimeout(tick, 60); } };
+    tick(); }
+  const STEP_ACT = [() => { st.s = H.slice(); showLinks(12, 1); draw(12); }, () => { st.s = H.slice(); hideLinks(); draw(); }, () => { damage(1); const i = DI.find(i => st.s[i] !== H[i]); showLinks(i, H[i]); draw(i); },
+    () => { damage(5); }, () => { damage(5); setTimeout(recall, 500); }, () => { st.s = H.map((v, i) => i % 3 ? v : T[i]); hideLinks(); draw(); }];
+  $$('[data-step]').forEach(b => b.onclick = () => { $$('[data-step]').forEach(x => x.classList.toggle('on', x === b)); const i = +b.dataset.step; cap.textContent = STEPS[i][1]; clearTimeout(st.timer); STEP_ACT[i](); });
+  $$('[data-tab]').forEach(b => b.onclick = () => { $$('[data-tab]').forEach(x => x.classList.toggle('on', x === b)); $('.tab-body').innerHTML = TABS[b.dataset.tab]; });
+  $$('[data-tool]').forEach(b => b.onclick = () => { const t = b.dataset.tool;
+    if (t === 'reset'){ clearTimeout(st.timer); st.s = H.slice(); hideLinks(); cap.textContent = ''; $$('[data-step]').forEach(x => x.classList.remove('on')); draw(); }
+    if (t === 'links'){ st.links = !st.links; b.classList.toggle('on', st.links); if (!st.links) hideLinks(); }
+    if (t === 'energy'){ st.energy = !st.energy; b.classList.toggle('on', st.energy); $('.energyfig').style.display = st.energy ? '' : 'none'; }
+    if (t === 'damage') damage(5); if (t === 'recall') recall(); });
+  $$('.ms').forEach(b => b.onclick = () => { $$('.ms').forEach(x => x.classList.toggle('on', x === b)); $('.year').textContent = b.dataset.y; });
+  $$('[data-side]').forEach(b => b.onclick = () => { if (b.dataset.side === 'Menu'){ el.classList.toggle('open'); el.style.setProperty('--side-w', el.classList.contains('open') ? '170px' : '58px'); }
+    else { $$('[data-side]').forEach(x => x.classList.toggle('on', x === b)); } });
+  draw();
+}
+
+/* ---------- the board ---------- */
+const cols = document.getElementById('cols');
+OPTIONS.forEach((o, i) => {
+  const c = document.createElement('section'); c.className = 'col';
+  c.innerHTML = `<h2>${o.name}<button>View large</button></h2><div class="chips"><span><i style="background:#23252b"></i>background #23252b</span><span><i style="background:${o.accent}"></i>accent ${o.accent}</span><span>glow ${['none', '2 px', 'soft'][o.glow]}${o.ring ? ', ring lamps' : ''}</span></div><p class="what">${o.what}</p><div class="viewport"><div class="frame"></div></div><p class="gesture">Try: Damage 5 then Recall, step 5, the tabs, a milestone card, the menu icon.</p>`;
+  const scr = screen({ ...o, cls: 't-night' }, i); for (const [k, v] of Object.entries(tokens(o))) scr.style.setProperty(k, v);
+  c.querySelector('.frame').appendChild(scr);
+  c.querySelector('h2 button').onclick = e => { const solo = !cols.classList.contains('solo'); cols.classList.toggle('solo', solo); c.classList.toggle('big', solo);
+    e.target.textContent = solo ? 'Back to all three' : 'View large'; fit(); };
+  cols.appendChild(c);
+});
+function fit(){ document.querySelectorAll('.viewport').forEach(v => { const k = v.clientWidth / 1280; v.style.height = (780 * k) + 'px'; v.querySelector('.frame').style.transform = `scale(${k})`; }); }
+addEventListener('resize', fit); fit();
+</script></body></html>

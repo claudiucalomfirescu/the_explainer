@@ -1,6 +1,7 @@
 # Plan — AI History Timeline (v1)
 
-Upstream: `docs/spec.md`. Five phases, each a vertical slice that ends in a site you can open.
+Upstream: `docs/spec.md`. Five phases, each a vertical slice that ends in a site you can open, plus
+Phase 6 (the lesson screen, v1.1) at the end.
 Phase 1 is a **pilot**: the whole app on four milestones, so layout, tone and card depth are judged
 before the other twelve cards are written. The run pauses for the owner's review after Phase 1.
 
@@ -100,3 +101,28 @@ in Phase 2. REQ-5 is proven with the placeholder; portraits are REQ-12 in Phase 
 
 Full browser suite on both builds, every acceptance criterion demonstrated, `prax_check` with no
 FAIL, changelog and status updated. Deploying is the owner's step (`docs/deploy.md`).
+
+## Phase 6: The Hopfield lesson screen (REQ-19, REQ-20, REQ-21)
+
+Added 2026-10-23 (run 202610231721, `/prax-app` re-run mode: new requirements, so a new phase after
+the shipped ones). One vertical slice: the lesson page end to end, on both hosts.
+
+### Objectives
+
+- Move the site header, timeline and footer into a route group so the lesson can have its own
+  full-screen layout, with every existing URL unchanged (ADR-004).
+- A pure, unit-tested valley model beside `lib/hopfield.ts`: the 50-state loop, its energies, the
+  place of any state on it (REQ-20).
+- The lesson page `/lesson/hopfield/`: stage, toolbar, tabs, steps, era strip, links, metadata, and
+  the link from the Hopfield card (REQ-19), styled as chosen and laid out for 375 px (REQ-21).
+- The host crawl and the accessibility scan extended to the lesson page; mutation probes for the
+  new behaviour.
+
+### Definition of done
+
+- [ ] All Phase 6 test tasks written and passing (valley unit tests; lesson browser tests,
+      including axe and 375 px; host crawl on both builds)
+- [ ] All Phase 6 impl tasks complete; every existing test still passes unchanged
+- [ ] Code reviewed (`/prax-review` with mutation probes; report in `sessions/`)
+- [ ] Architecture integrity preserved (matches `docs/architecture.md` and ADR-004)
+- [ ] Status updated; REQ-19 to REQ-21 marked complete with their proof

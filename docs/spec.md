@@ -153,10 +153,44 @@ whatever depth suits them.
   the owner runs to create the repository, connect Vercel, enable Pages, and compare the two hosts
   (load time, preview card on LinkedIn and X, custom-domain path).
 
+### Lesson view (v1.1, added 2026-10-23)
+
+The concept and the chosen look are in `docs/concept-lesson-layout.md`; the settled mock-up is
+`docs/concept/style-final.html`. This change builds one lesson, for the Hopfield network, beside
+the existing card; the card and its widget stay as they are.
+
+- **REQ-19 — Hopfield lesson screen.** `/lesson/hopfield/` is one screen in the chosen style
+  (graphite `#23252b`, signal blue `#5f9dff`, a short soft glow on lit parts only, a 500 px text
+  panel on wide screens). It shows: a stage with the network and its energy track and a toolbar
+  (Reset, Links, Show the energy, Damage 5, Recall); tabs Idea, Where it came from, Who and Paper
+  holding the same text as the Hopfield milestone file; the milestone's "go deeper" steps as a
+  numbered list, where choosing a step makes the stage act it out and shows that step's text; a
+  strip of all sixteen milestones grouped by era, Hopfield marked as current and every other one
+  linking to its card; links to the timeline and to the Hopfield card. The page has its own title,
+  description and share tags. The Hopfield card links to the lesson. No other milestone has a
+  lesson, so any other `/lesson/<slug>/` is the site's 404 page.
+- **REQ-20 — A real network and an exact valley.** The stage runs the same model as REQ-13 with H
+  and T stored. The energy shown always equals the model's energy and never rises during recall.
+  "Damage 5" flips five of the sixteen neurons where H and T differ, and Recall then updates one
+  neuron at a time until nothing changes and restores H exactly. The track is the loop
+  H → T → inverse H → inverse T → H (flip the sixteen, then the other nine, then back): its height
+  at each state is that state's energy, the ball sits at the network's current place on it, and
+  recall started anywhere on the loop stays on it.
+- **REQ-21 — The lesson works for everyone.** Every control works by keyboard with a visible focus
+  ring; every neuron is a button that reports its state; the step text is announced; text meets
+  WCAG 2.2 AA contrast on the dark background; an axe scan reports no serious or critical issue.
+  At 375 px the page has no sideways scroll (stage, panel and strip stack, the strip scrolls in its
+  own row). With reduced motion asked for, nothing animates. On both hosts the page loads with no
+  error response or console error.
+
+Not in this change: a reading-progress counter, sidebar sections for eras, people and papers, and
+lessons for the other fifteen milestones (`docs/concept-lesson-layout.md`, "What it costs").
+
 ## Out of scope (v1)
 
 - Custom domain, analytics or tracking, comments, a CMS, translations.
-- Dark mode (candidate for v2).
+- Dark mode (candidate for v2). The lesson screen of REQ-19 has its own dark design; it is not a
+  site-wide dark mode, and the card pages stay light.
 - GSAP and new Three.js work beyond embedding the existing explainer.
 - Interactive visuals other than the Hopfield network and the transformer embed.
 

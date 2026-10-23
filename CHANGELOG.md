@@ -36,3 +36,10 @@
   page, keyboard focus in the Hopfield widget; tests: wider samples and steadier controls), one
   was already known. 60 mutation probes, all caught.
 - Portrait credits now say "cropped", as CC BY and CC BY-SA ask when an image is changed.
+- v1.1, Phase 6 (run 202610231721): the Hopfield lesson screen at `/lesson/hopfield/`, from the
+  concept and the style chosen over three option boards (`docs/concept/`). Network and energy
+  track on one stage, the card's text in tabs, the six steps acted out on the stage, every
+  milestone in a strip. The track is exact: the loop H, T, inverse H, inverse T, whose height is
+  the network's energy (`src/lib/valley.ts`). The site chrome moved into a route group so the
+  lesson has its own layout; every existing URL is unchanged (ADR-004). The Hopfield card links to
+  the lesson. Requirements REQ-19 to REQ-21.
