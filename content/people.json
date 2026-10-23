@@ -1,0 +1,210 @@
+[
+  {
+    "id": "warren-mcculloch",
+    "name": "Warren McCulloch"
+  },
+  {
+    "id": "walter-pitts",
+    "name": "Walter Pitts",
+    "portrait": {
+      "file": "images/people/walter-pitts.jpg",
+      "author": "Francis Bello",
+      "licence": "Public domain",
+      "licenceUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing#Material_in_the_public_domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:1954_Walter_Pitts_and_a_blackboard.jpg"
+    }
+  },
+  {
+    "id": "donald-hebb",
+    "name": "Donald Hebb"
+  },
+  {
+    "id": "frank-rosenblatt",
+    "name": "Frank Rosenblatt"
+  },
+  {
+    "id": "marvin-minsky",
+    "name": "Marvin Minsky",
+    "portrait": {
+      "file": "images/people/marvin-minsky.jpg",
+      "author": "Sethwoodworth (English Wikipedia)",
+      "licence": "CC BY 3.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Marvin_Minsky_at_OLPCb_%283x4_cropped%29.jpg"
+    }
+  },
+  {
+    "id": "seymour-papert",
+    "name": "Seymour Papert",
+    "portrait": {
+      "file": "images/people/seymour-papert.jpg",
+      "author": "ak_mardini",
+      "licence": "CC BY-SA 2.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Papert.jpg"
+    }
+  },
+  {
+    "id": "john-hopfield",
+    "name": "John Hopfield",
+    "portrait": {
+      "file": "images/people/john-hopfield.jpg",
+      "author": "bhadeshia123",
+      "licence": "CC BY 3.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:John_Hopfield_2016.jpg"
+    }
+  },
+  {
+    "id": "geoffrey-hinton",
+    "name": "Geoffrey Hinton",
+    "portrait": {
+      "file": "images/people/geoffrey-hinton.jpg",
+      "author": "Cmichel67",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Geoffrey_Hinton_in_2026.jpg"
+    }
+  },
+  {
+    "id": "terry-sejnowski",
+    "name": "Terry Sejnowski"
+  },
+  {
+    "id": "david-ackley",
+    "name": "David Ackley"
+  },
+  {
+    "id": "david-rumelhart",
+    "name": "David Rumelhart",
+    "portrait": {
+      "file": "images/people/david-rumelhart.jpg",
+      "author": "Rolf Kickuth",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:DavidRumelhart-IJCNNseattle1991-07-08.jpg"
+    }
+  },
+  {
+    "id": "ronald-williams",
+    "name": "Ronald Williams"
+  },
+  {
+    "id": "robert-jacobs",
+    "name": "Robert Jacobs"
+  },
+  {
+    "id": "michael-jordan",
+    "name": "Michael I. Jordan"
+  },
+  {
+    "id": "steven-nowlan",
+    "name": "Steven Nowlan"
+  },
+  {
+    "id": "noam-shazeer",
+    "name": "Noam Shazeer"
+  },
+  {
+    "id": "sepp-hochreiter",
+    "name": "Sepp Hochreiter",
+    "portrait": {
+      "file": "images/people/sepp-hochreiter.jpg",
+      "author": "C.Stadler/Bwag",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sepp_Hochreiter_-_Buch_Wien_2025.JPG"
+    }
+  },
+  {
+    "id": "jurgen-schmidhuber",
+    "name": "Jürgen Schmidhuber",
+    "portrait": {
+      "file": "images/people/jurgen-schmidhuber.jpg",
+      "author": "ITU/R.Farrell",
+      "licence": "CC BY 2.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:J%C3%BCrgen_Schmidhuber%2C_2017_%28cropped%29.jpg"
+    }
+  },
+  {
+    "id": "simon-osindero",
+    "name": "Simon Osindero"
+  },
+  {
+    "id": "yee-whye-teh",
+    "name": "Yee-Whye Teh"
+  },
+  {
+    "id": "alex-krizhevsky",
+    "name": "Alex Krizhevsky"
+  },
+  {
+    "id": "ilya-sutskever",
+    "name": "Ilya Sutskever"
+  },
+  {
+    "id": "tomas-mikolov",
+    "name": "Tomas Mikolov",
+    "portrait": {
+      "file": "images/people/tomas-mikolov.jpg",
+      "author": "Jindřich Nosek (NoJin)",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tom%C3%A1%C5%A1_Mikolov_%282020%29.jpg"
+    }
+  },
+  {
+    "id": "dzmitry-bahdanau",
+    "name": "Dzmitry Bahdanau"
+  },
+  {
+    "id": "kyunghyun-cho",
+    "name": "Kyunghyun Cho",
+    "portrait": {
+      "file": "images/people/kyunghyun-cho.jpg",
+      "author": "Xuthoria",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:SD_2025_-_Kyunghyun_Cho_02_%28cropped%29.jpg"
+    }
+  },
+  {
+    "id": "yoshua-bengio",
+    "name": "Yoshua Bengio",
+    "portrait": {
+      "file": "images/people/yoshua-bengio.jpg",
+      "author": "Maryse Boyce",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yoshua_Bengio_2019_cropped.jpg"
+    }
+  },
+  {
+    "id": "ashish-vaswani",
+    "name": "Ashish Vaswani"
+  },
+  {
+    "id": "alec-radford",
+    "name": "Alec Radford"
+  },
+  {
+    "id": "tom-brown",
+    "name": "Tom Brown"
+  },
+  {
+    "id": "jared-kaplan",
+    "name": "Jared Kaplan",
+    "portrait": {
+      "file": "images/people/jared-kaplan.jpg",
+      "author": "TechCrunch",
+      "licence": "CC BY 2.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jared_Kaplan_%28cropped%29.jpg"
+    }
+  },
+  {
+    "id": "long-ouyang",
+    "name": "Long Ouyang"
+  }
+]

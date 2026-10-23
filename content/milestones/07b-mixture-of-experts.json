@@ -1,0 +1,86 @@
+{
+  "slug": "mixture-of-experts",
+  "order": 75,
+  "year": 1991,
+  "yearLabel": "1991",
+  "era": "1990s-sequences",
+  "bonus": true,
+  "shortTitle": "Mixture of experts",
+  "title": "Mixture of experts: a team of specialists",
+  "idea": "Instead of one big network doing everything, train a team of smaller expert networks and a gate that decides which expert handles each input. Each expert gets good at its own slice of the problem.",
+  "cameFrom": [
+    {
+      "milestone": "backpropagation",
+      "note": "The experts and the gate are all ordinary networks trained by passing the error backwards."
+    },
+    {
+      "label": "Competitive learning",
+      "note": "Earlier networks where units compete to respond to each input, so that each ends up specialising."
+    }
+  ],
+  "people": [
+    {
+      "person": "robert-jacobs",
+      "note": "Researcher in brain and cognitive sciences at MIT and first author of the 1991 paper."
+    },
+    {
+      "person": "michael-jordan",
+      "note": "Then at MIT, later a professor of computer science and statistics at the University of California, Berkeley."
+    },
+    {
+      "person": "steven-nowlan",
+      "note": "Doctoral student of Geoffrey Hinton, working with him in Toronto; his doctorate (1991) is from Carnegie Mellon University."
+    },
+    {
+      "person": "geoffrey-hinton",
+      "note": "By then at the University of Toronto."
+    },
+    {
+      "person": "noam-shazeer",
+      "note": "Google engineer and first author of the 2017 paper that scaled the idea to thousands of experts. He is also an author of the Transformer paper."
+    }
+  ],
+  "moreAuthors": true,
+  "papers": [
+    {
+      "title": "Adaptive Mixtures of Local Experts",
+      "authors": ["Robert A. Jacobs", "Michael I. Jordan", "Steven J. Nowlan", "Geoffrey E. Hinton"],
+      "year": 1991,
+      "venue": "Neural Computation, 3(1), 79–87",
+      "url": "https://doi.org/10.1162/neco.1991.3.1.79",
+      "summary": "It trained several expert networks together with a gating network that chooses between them. Because the experts compete for each example, each one specialises in part of the task, as the paper showed on recognising vowel sounds."
+    },
+    {
+      "title": "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer",
+      "authors": ["Noam Shazeer", "Azalia Mirhoseini", "Krzysztof Maziarz", "Andy Davis", "Quoc Le", "Geoffrey Hinton", "Jeff Dean"],
+      "year": 2017,
+      "venue": "International Conference on Learning Representations (ICLR) 2017; arXiv:1701.06538",
+      "url": "https://arxiv.org/abs/1701.06538",
+      "summary": "It placed a layer of up to thousands of experts inside a language model and switched on only a few of them for each word. The model grew to 137 billion parameters while the work done per word stayed small."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Experts and a gate",
+        "body": "Each expert is a full network that could answer on its own. A separate gating network looks at the same input and outputs a weight for each expert, with weights adding up to one."
+      },
+      {
+        "heading": "Competition makes specialists",
+        "body": "In the 1991 version, an expert is rewarded for an example only in proportion to how much the gate trusted it. Experts that do slightly better on some inputs win more of them and drift into specialities."
+      },
+      {
+        "heading": "Sparse gating",
+        "body": "The 2017 version keeps only the top few experts for each input and skips the rest. A model can then hold far more knowledge in total without doing more work per word."
+      },
+      {
+        "heading": "Keeping the load even",
+        "body": "Left alone, the gate tends to favour a few experts. Extra training terms push it to spread the work, so every expert learns and no machine sits idle."
+      },
+      {
+        "heading": "Today",
+        "body": "Many of today's large language models are built this way, among them openly published ones such as Mixtral 8x7B and DeepSeek-V3."
+      }
+    ]
+  }
+}

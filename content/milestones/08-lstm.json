@@ -1,0 +1,68 @@
+{
+  "slug": "lstm",
+  "order": 80,
+  "year": 1997,
+  "yearLabel": "1997",
+  "era": "1990s-sequences",
+  "shortTitle": "LSTM",
+  "title": "LSTM: a memory that lasts",
+  "idea": "A network for sequences, such as sentences or sound, that carries a memory forward through time. Small gates decide what to write into the memory and when to read it, so the network can link things that are far apart.",
+  "cameFrom": [
+    {
+      "label": "Recurrent networks (Jordan 1986, Elman 1990)",
+      "note": "Networks that feed their own previous state back in, so they can process a sequence one step at a time."
+    },
+    {
+      "milestone": "backpropagation",
+      "note": "Recurrent networks are trained by passing the error back through time. Hochreiter's 1991 thesis showed why that error fades away over long gaps."
+    }
+  ],
+  "people": [
+    {
+      "person": "sepp-hochreiter",
+      "note": "German computer scientist who, as a student at the Technical University of Munich, analysed why recurrent networks forget, the problem LSTM solves."
+    },
+    {
+      "person": "jurgen-schmidhuber",
+      "note": "His supervisor, then at the IDSIA research institute in Lugano, Switzerland, where much of the later work on LSTM was done."
+    }
+  ],
+  "papers": [
+    {
+      "title": "Long Short-Term Memory",
+      "authors": ["Sepp Hochreiter", "Jürgen Schmidhuber"],
+      "year": 1997,
+      "venue": "Neural Computation, 9(8), 1735–1780",
+      "url": "https://doi.org/10.1162/neco.1997.9.8.1735",
+      "summary": "It introduced a memory cell whose contents are carried forward unchanged unless gates decide otherwise, so the training signal no longer fades over long sequences. On test problems it learned to connect events more than 1,000 time steps apart, where earlier recurrent networks failed."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "One network, many steps",
+        "body": "A recurrent network reads a sequence one item at a time, using the same weights at every step and passing its state from one step to the next."
+      },
+      {
+        "heading": "The fading signal",
+        "body": "Training sends the error back through every step. At each step the signal is multiplied again, so over long gaps it shrinks to nothing or blows up, and the network cannot learn long-range links."
+      },
+      {
+        "heading": "A protected memory cell",
+        "body": "LSTM adds a cell that copies its contents to the next step unchanged. Because nothing shrinks it on the way, the error signal can travel back through many steps."
+      },
+      {
+        "heading": "Gates",
+        "body": "An input gate decides when new information is written into the cell, and an output gate decides when the cell's contents are used. Each gate is a small learned neuron that opens or closes."
+      },
+      {
+        "heading": "The forget gate came later",
+        "body": "In 2000, Felix Gers, Schmidhuber and Fred Cummins added a forget gate that lets the cell clear itself. Almost every later LSTM includes it."
+      },
+      {
+        "heading": "Where it went",
+        "body": "In the 2010s LSTMs powered speech recognition and machine translation in widely used products, until transformers replaced them for most language tasks."
+      }
+    ]
+  }
+}

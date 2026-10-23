@@ -1,0 +1,76 @@
+{
+  "slug": "boltzmann-machine",
+  "order": 60,
+  "year": 1985,
+  "yearLabel": "1985",
+  "era": "1980s-revival",
+  "shortTitle": "The Boltzmann machine",
+  "title": "The Boltzmann machine: learning by matching",
+  "idea": "A network with hidden helper neurons that learns what typical examples look like. It adjusts its links until, left to run freely, it produces patterns that resemble the real examples it was shown.",
+  "cameFrom": [
+    {
+      "milestone": "hopfield",
+      "note": "It uses the same kind of network, with symmetric links and an energy, but its neurons switch on and off at random, more often when that lowers the energy."
+    },
+    {
+      "label": "Statistical physics",
+      "note": "The Boltzmann distribution from physics says how likely each state of a system is at a given temperature, and gave the machine its name and its maths."
+    },
+    {
+      "label": "Simulated annealing (Kirkpatrick, Gelatt and Vecchi, 1983)",
+      "note": "A search method that starts hot and random and cools slowly, which the machine used to settle into good states."
+    }
+  ],
+  "people": [
+    {
+      "person": "geoffrey-hinton",
+      "note": "British-Canadian computer scientist, then at Carnegie Mellon University. He shared the 2024 Nobel Prize in Physics with John Hopfield, partly for this work."
+    },
+    {
+      "person": "terry-sejnowski",
+      "note": "Physicist turned neuroscientist, then at Johns Hopkins University, who worked out the machine with Hinton."
+    },
+    {
+      "person": "david-ackley",
+      "note": "Graduate student at Carnegie Mellon and first author of the 1985 paper."
+    }
+  ],
+  "papers": [
+    {
+      "title": "A Learning Algorithm for Boltzmann Machines",
+      "authors": ["David H. Ackley", "Geoffrey E. Hinton", "Terrence J. Sejnowski"],
+      "year": 1985,
+      "venue": "Cognitive Science, 9(1), 147–169",
+      "url": "https://doi.org/10.1207/s15516709cog0901_7",
+      "summary": "It gave a learning rule for networks of random on/off neurons that include hidden units the data never sets directly. The rule needs only information local to each link, and lets the hidden units discover features of the data by themselves."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Random neurons",
+        "body": "Each neuron is on or off. Instead of always choosing the state with lower energy, it switches on with a probability that grows with its total input. A temperature setting controls how random it is."
+      },
+      {
+        "heading": "Visible and hidden",
+        "body": "Some neurons are visible and show the data. Others are hidden: they are never set from outside, and are free to stand for whatever helps explain the data."
+      },
+      {
+        "heading": "Two phases",
+        "body": "In the first phase the visible neurons are held at a real example and the rest of the network settles. In the second phase nothing is held and the whole network runs freely."
+      },
+      {
+        "heading": "The learning rule",
+        "body": "For each link, compare how often its two neurons are on together in each phase. Strengthen the link if they are together more with real data, weaken it if more when running freely."
+      },
+      {
+        "heading": "Why it was slow",
+        "body": "Each phase has to run until the random network settles into its long-run behaviour, which takes many steps. That made the full machine too slow for large problems."
+      },
+      {
+        "heading": "The fast version",
+        "body": "Removing the links between hidden neurons, and between visible neurons, gives the restricted Boltzmann machine, first described by Paul Smolensky in 1986 as the \"harmonium\". With a shortcut Hinton published in 2002, it trains quickly, and it became the building block of deep belief networks."
+      }
+    ]
+  }
+}

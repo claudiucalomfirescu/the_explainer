@@ -1,0 +1,81 @@
+{
+  "slug": "gpt-scaling",
+  "order": 140,
+  "year": 2018,
+  "yearLabel": "2018–2020",
+  "era": "scale",
+  "shortTitle": "GPT and scaling laws",
+  "title": "GPT and the scaling laws",
+  "idea": "Train a transformer to predict the next word on an enormous amount of text, then keep making it bigger. Its performance improves smoothly and predictably with size, data and computing power, and very large models start doing new tasks from just a few examples.",
+  "cameFrom": [
+    {
+      "milestone": "transformer",
+      "note": "GPT keeps only the writing half of the transformer and trains it to continue text."
+    },
+    {
+      "label": "Pre-training, then fine-tuning (2018)",
+      "note": "The first GPT showed that a model pre-trained on books could be adapted to many language tasks with little extra training."
+    }
+  ],
+  "people": [
+    {
+      "person": "alec-radford",
+      "note": "Researcher at OpenAI and first author of the first two GPT papers, in 2018 and 2019."
+    },
+    {
+      "person": "tom-brown",
+      "note": "Engineer at OpenAI and first author of the GPT-3 paper. He later co-founded Anthropic."
+    },
+    {
+      "person": "jared-kaplan",
+      "note": "Theoretical physicist at Johns Hopkins University, working with OpenAI, who led the scaling-laws study. He later co-founded Anthropic."
+    }
+  ],
+  "moreAuthors": true,
+  "papers": [
+    {
+      "title": "Scaling Laws for Neural Language Models",
+      "authors": ["Jared Kaplan", "Sam McCandlish", "Tom Henighan", "Tom B. Brown", "Benjamin Chess", "Rewon Child", "Scott Gray", "Alec Radford", "Jeffrey Wu", "Dario Amodei"],
+      "year": 2020,
+      "venue": "arXiv:2001.08361",
+      "url": "https://arxiv.org/abs/2001.08361",
+      "summary": "It measured how a language model's error falls as the model, the data and the computing budget grow. The error follows simple power laws across more than seven orders of magnitude, so the result of a bigger training run can be predicted before it is paid for."
+    },
+    {
+      "title": "Language Models are Few-Shot Learners",
+      "authors": ["Tom B. Brown", "Benjamin Mann", "Nick Ryder", "Melanie Subbiah", "Jared Kaplan", "and 26 more authors"],
+      "year": 2020,
+      "venue": "Advances in Neural Information Processing Systems 33 (NeurIPS 2020); arXiv:2005.14165",
+      "url": "https://arxiv.org/abs/2005.14165",
+      "summary": "It trained GPT-3, a model with 175 billion parameters. Given only a task description and a few examples in its prompt, with no further training, it performed many language tasks, sometimes close to models trained specially for them."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "One simple task",
+        "body": "The model reads text and learns to predict the next piece of a word. Doing that well across the internet's text forces it to pick up grammar, facts and some reasoning."
+      },
+      {
+        "heading": "Three GPTs",
+        "body": "GPT (2018) had about 117 million parameters, GPT-2 (2019) 1.5 billion and GPT-3 (2020) 175 billion. The design barely changed; the scale did."
+      },
+      {
+        "heading": "Power laws",
+        "body": "Plot the error against model size, data or computing power on log scales and you get nearly straight lines. Doubling the budget buys a predictable, steady improvement."
+      },
+      {
+        "heading": "Learning from the prompt",
+        "body": "Large models can pick up a new task from a few worked examples placed in the prompt, without changing any weights. This is called in-context or few-shot learning."
+      },
+      {
+        "heading": "Revised in 2022",
+        "body": "The Chinchilla study by DeepMind found that, for a fixed budget, models of the time were too big and trained on too little text, and that model size and data should grow together."
+      },
+      {
+        "heading": "What scale does not fix",
+        "body": "A next-word predictor continues text; it does not by itself follow instructions or avoid making things up. That gap is what the next milestone addresses."
+      }
+    ]
+  }
+}

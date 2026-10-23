@@ -1,0 +1,68 @@
+{
+  "slug": "perceptrons-critique",
+  "order": 40,
+  "year": 1969,
+  "yearLabel": "1969",
+  "era": "first-ai-winter",
+  "shortTitle": "Perceptrons and the first winter",
+  "title": "Perceptrons: the critique and the first AI winter",
+  "idea": "Two MIT scientists proved, with careful mathematics, that simple one-layer perceptrons cannot learn some basic tasks, such as telling whether a shape is all in one piece. Many people read it as a verdict on neural networks as a whole, and research and funding shrank sharply for over a decade.",
+  "cameFrom": [
+    {
+      "milestone": "perceptron",
+      "note": "The book is a close mathematical study of Rosenblatt's machine: what it can learn, and what no amount of training will teach it."
+    },
+    {
+      "label": "Early enthusiasm and big claims",
+      "note": "Press coverage in the late 1950s had promised machines that would soon walk, talk and think, and the book was partly a correction to that hype."
+    }
+  ],
+  "people": [
+    {
+      "person": "marvin-minsky",
+      "note": "Co-founder of the MIT Artificial Intelligence Laboratory. As a student he had built SNARC, one of the first neural network learning machines, in 1951."
+    },
+    {
+      "person": "seymour-papert",
+      "note": "Mathematician at MIT who had worked with the psychologist Jean Piaget, and who later co-created the Logo programming language for children."
+    }
+  ],
+  "papers": [
+    {
+      "title": "Perceptrons: An Introduction to Computational Geometry",
+      "authors": ["Marvin Minsky", "Seymour Papert"],
+      "year": 1969,
+      "publisher": "MIT Press, Cambridge, Massachusetts (book; expanded edition 1988, reissued 2017)",
+      "url": "https://doi.org/10.7551/mitpress/11301.001.0001",
+      "summary": "The book proved that perceptrons whose units each look at only a small part of the input cannot compute properties that depend on the whole picture, such as whether the number of lit points is odd or whether a figure is connected. It doubted that adding more layers would be a fruitful way out. The 1988 expanded edition added a reply to the neural network revival of the 1980s."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Local views",
+        "body": "In the book's model, each unit of a perceptron looks at only a limited patch of the input picture, and a final unit adds up their votes with weights."
+      },
+      {
+        "heading": "Parity needs the whole picture",
+        "body": "To say whether an odd or even number of points is lit, some unit must see every point at once. No collection of small, local views can do it, however the weights are set."
+      },
+      {
+        "heading": "Connectedness too",
+        "body": "Whether a shape is one connected piece is also a global property. The book proved that perceptrons with limited views cannot decide it."
+      },
+      {
+        "heading": "XOR, the smallest case",
+        "body": "With just two inputs, \"exactly one is on\" (XOR) already defeats a single unit, because no straight line separates the yes cases from the no cases. It became the standard example of the limit."
+      },
+      {
+        "heading": "Layers were the way out",
+        "body": "A network with a hidden layer can compute XOR and parity. What nobody had in 1969 was a practical way to train the hidden layer, and the book was sceptical that one would pay off."
+      },
+      {
+        "heading": "The winter",
+        "body": "Funding and attention moved to symbolic AI, which works with explicit rules and logic. Neural network research shrank through the 1970s, though some work went on (Amari, Kohonen, Grossberg, Fukushima). Physicists and psychologists revived it in the 1980s. Historians still debate how much of the decline the book itself caused."
+      }
+    ]
+  }
+}

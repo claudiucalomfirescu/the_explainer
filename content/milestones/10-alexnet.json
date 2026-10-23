@@ -1,0 +1,84 @@
+{
+  "slug": "alexnet",
+  "order": 100,
+  "year": 2012,
+  "yearLabel": "2012",
+  "era": "deep-learning",
+  "shortTitle": "AlexNet",
+  "title": "AlexNet: the image-recognition breakthrough",
+  "idea": "A deep network, trained on more than a million labelled photos using graphics cards built for video games, won the 2012 ImageNet image-recognition contest by a wide margin. After it, deep learning became the default approach to computer vision.",
+  "cameFrom": [
+    {
+      "milestone": "backpropagation",
+      "note": "The whole network, eight learning layers deep, was trained end to end by passing the error backwards."
+    },
+    {
+      "milestone": "deep-belief-networks",
+      "note": "The deep learning revival had shown that deep networks were worth the effort, and AlexNet came out of the same Toronto group."
+    },
+    {
+      "label": "Convolutional networks (LeCun and colleagues, 1989)",
+      "note": "Networks that slide the same small feature detectors across an image, first used to read handwritten zip codes."
+    },
+    {
+      "label": "GPUs",
+      "note": "Graphics cards do thousands of multiplications at once. Two NVIDIA GTX 580 cards trained the network in five to six days."
+    },
+    {
+      "label": "ImageNet (Fei-Fei Li and colleagues, 2009)",
+      "note": "A huge labelled photo collection. The 2012 contest used about 1.2 million training images in 1,000 categories."
+    }
+  ],
+  "people": [
+    {
+      "person": "alex-krizhevsky",
+      "note": "Doctoral student of Hinton at the University of Toronto, who wrote the fast graphics-card code that made the training possible."
+    },
+    {
+      "person": "ilya-sutskever",
+      "note": "Doctoral student of Hinton at Toronto, who in 2015 co-founded OpenAI."
+    },
+    {
+      "person": "geoffrey-hinton",
+      "note": "Their supervisor at the University of Toronto. The three founded a start-up on this work that Google acquired in 2013."
+    }
+  ],
+  "papers": [
+    {
+      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+      "authors": ["Alex Krizhevsky", "Ilya Sutskever", "Geoffrey E. Hinton"],
+      "year": 2012,
+      "venue": "Advances in Neural Information Processing Systems 25 (NeurIPS 2012), 1097–1105",
+      "url": "https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html",
+      "summary": "It described a network with 60 million parameters, five convolutional layers and three fully connected ones, trained on two graphics cards. It won the 2012 contest with a top-5 error of 15.3 percent, against 26.2 percent for the next best entry. Simple neurons, a trick called dropout and heavy data augmentation made the training work."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Convolution",
+        "body": "Early layers slide small learned filters across the image. The same filter is reused everywhere, so a detector for an edge or a texture works wherever the edge appears."
+      },
+      {
+        "heading": "Layers of features",
+        "body": "Later layers combine those features into larger ones, from edges to textures to parts of objects, and the last layers vote on the 1,000 categories."
+      },
+      {
+        "heading": "Simple neurons",
+        "body": "Each neuron outputs its input if positive and zero otherwise (ReLU). This trains several times faster than the smooth squashing curves used before."
+      },
+      {
+        "heading": "Dropout",
+        "body": "During training, half the neurons in the large layers are switched off at random for each example. The network cannot lean on any one neuron, so it generalises better."
+      },
+      {
+        "heading": "More data from the same data",
+        "body": "Random crops and flips of each photo, and small colour changes, multiplied the effective training set and reduced overfitting."
+      },
+      {
+        "heading": "Top-5 error",
+        "body": "The contest counted an answer as right if the true label was among the network's five best guesses. AlexNet got 15.3 percent wrong; the next best team, using other methods, got 26.2 percent wrong."
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "slug": "word2vec",
+  "order": 110,
+  "year": 2013,
+  "yearLabel": "2013",
+  "era": "deep-learning",
+  "shortTitle": "Word2vec: words as vectors",
+  "title": "Word2vec: words as lists of numbers",
+  "idea": "Turn every word into a list of a few hundred numbers, so that words used in similar ways get similar numbers. The numbers even capture relations: king minus man plus woman lands closest to queen.",
+  "cameFrom": [
+    {
+      "label": "Neural language models (Bengio and colleagues, 2003)",
+      "note": "Networks that predict the next word learn a list of numbers for each word along the way. Word2vec made that learning far cheaper."
+    },
+    {
+      "label": "The distributional idea (Harris 1954, Firth 1957)",
+      "note": "Linguists had argued that a word's meaning shows in the company it keeps: the words that appear around it."
+    }
+  ],
+  "people": [
+    {
+      "person": "tomas-mikolov",
+      "note": "Czech computer scientist at Google who had built recurrent network language models for his doctorate at Brno University of Technology."
+    }
+  ],
+  "moreAuthors": true,
+  "papers": [
+    {
+      "title": "Efficient Estimation of Word Representations in Vector Space",
+      "authors": ["Tomas Mikolov", "Kai Chen", "Greg Corrado", "Jeffrey Dean"],
+      "year": 2013,
+      "venue": "ICLR 2013 Workshop; arXiv:1301.3781",
+      "url": "https://arxiv.org/abs/1301.3781",
+      "summary": "It proposed two very simple models that learn word vectors from huge amounts of text, training on 1.6 billion words in less than a day. It showed that the vectors encode meaning and grammar well enough to solve analogy questions by simple arithmetic."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "The problem with word lists",
+        "body": "To a computer, \"cat\" and \"kitten\" are just different entries in a dictionary, no closer than \"cat\" and \"carburettor\". Nothing says they are related."
+      },
+      {
+        "heading": "A guessing game",
+        "body": "Slide a window over billions of words of text. The skip-gram model tries to guess the neighbouring words from the middle one; the other model guesses the middle word from its neighbours."
+      },
+      {
+        "heading": "The vectors are the by-product",
+        "body": "Each word starts with random numbers that are nudged to make the guesses better. Words that appear in similar company end up with similar numbers."
+      },
+      {
+        "heading": "Arithmetic on meaning",
+        "body": "Directions in this space carry relations. Subtract the numbers for \"man\" from \"king\", add \"woman\", and the nearest word, leaving out the three words you started from, is \"queen\". The same works for countries and capitals, or verb tenses."
+      },
+      {
+        "heading": "Kept deliberately simple",
+        "body": "Earlier language models had large hidden layers. Word2vec dropped them, which made training cheap enough to use far more text, and more text mattered more than a cleverer model."
+      },
+      {
+        "heading": "The limit",
+        "body": "Each word gets one fixed list of numbers, so \"bank\" means the same by a river as in a high street. Later models, transformers among them, give each word numbers that depend on its sentence."
+      }
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "slug": "transformer",
+  "order": 130,
+  "year": 2017,
+  "yearLabel": "2017",
+  "era": "attention-transformers",
+  "shortTitle": "The transformer",
+  "title": "The transformer: attention is all you need",
+  "idea": "A network built from attention, in which every word decides which other words matter to it and looks at all of them at once, instead of reading one word at a time. That made training fast on modern chips, and it is the design inside today's language models.",
+  "cameFrom": [
+    {
+      "milestone": "attention",
+      "note": "It keeps attention and drops the recurrent network around it, letting words attend to each other inside one sentence too (self-attention)."
+    },
+    {
+      "label": "Parallel hardware",
+      "note": "Graphics cards and Google's TPU chips are fastest when many calculations run at once, which a word-by-word network cannot offer."
+    }
+  ],
+  "people": [
+    {
+      "person": "ashish-vaswani",
+      "note": "Researcher at Google Brain and first author of the paper."
+    },
+    {
+      "person": "noam-shazeer",
+      "note": "Google engineer who, among other parts, proposed the scaled dot-product and multi-head attention used in the paper."
+    }
+  ],
+  "moreAuthors": true,
+  "papers": [
+    {
+      "title": "Attention Is All You Need",
+      "authors": [
+        "Ashish Vaswani",
+        "Noam Shazeer",
+        "Niki Parmar",
+        "Jakob Uszkoreit",
+        "Llion Jones",
+        "Aidan N. Gomez",
+        "Łukasz Kaiser",
+        "Illia Polosukhin"
+      ],
+      "year": 2017,
+      "venue": "Advances in Neural Information Processing Systems 30 (NeurIPS 2017); arXiv:1706.03762",
+      "url": "https://arxiv.org/abs/1706.03762",
+      "summary": "It introduced the transformer, a translation network with no recurrence, built from attention and simple per-word layers. It set new records on English-to-German and English-to-French translation while training in a fraction of the time of earlier models. The design soon spread to almost every kind of language model."
+    }
+  ],
+  "deeper": {
+    "visual": "transformer",
+    "steps": [
+      {
+        "heading": "Words in, numbers out",
+        "body": "Each word (or piece of a word) becomes a list of numbers. Because nothing reads the sentence in order, a position signal made of sine waves is added so the model knows which word came where."
+      },
+      {
+        "heading": "Query, key, value",
+        "body": "For each word the model makes three lists of numbers: a query (what am I looking for?), a key (what do I offer?) and a value (what do I pass on?)."
+      },
+      {
+        "heading": "Self-attention",
+        "body": "Each word compares its query with every word's key. The scores, turned into weights that add up to one, decide how much of each word's value it takes in. All words do this at the same time."
+      },
+      {
+        "heading": "Several heads",
+        "body": "This runs in parallel in several heads, eight in the paper's base model, so different heads can track different relations, such as grammar or meaning."
+      },
+      {
+        "heading": "Then a small network per word",
+        "body": "After attention, each word passes through the same small two-layer network on its own. Shortcut connections and normalisation around each part keep deep stacks trainable."
+      },
+      {
+        "heading": "Stack it",
+        "body": "The paper stacked six such layers to read the source and six to write the translation, with the writer only allowed to look at words it has already written. Today's language models keep the writer half and stack it far deeper."
+      }
+    ]
+  }
+}

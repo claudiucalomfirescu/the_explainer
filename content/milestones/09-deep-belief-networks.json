@@ -1,0 +1,72 @@
+{
+  "slug": "deep-belief-networks",
+  "order": 90,
+  "year": 2006,
+  "yearLabel": "2006",
+  "era": "deep-learning",
+  "shortTitle": "Deep belief networks",
+  "title": "Deep belief networks: training deep, one layer at a time",
+  "idea": "A way to train networks many layers deep: each layer first learns, without being told any right answers, to describe the layer below it, and then the whole stack is adjusted together. It convinced researchers that deep networks could be trained after all.",
+  "cameFrom": [
+    {
+      "milestone": "boltzmann-machine",
+      "note": "Each layer is a restricted Boltzmann machine, the fast-training version with no links inside a layer."
+    },
+    {
+      "label": "Contrastive divergence (Hinton 2002)",
+      "note": "A shortcut that trains a restricted Boltzmann machine with one quick step of running freely instead of a long wait."
+    }
+  ],
+  "people": [
+    {
+      "person": "geoffrey-hinton",
+      "note": "At the University of Toronto, where he kept working on neural networks through years when few others did."
+    },
+    {
+      "person": "simon-osindero",
+      "note": "Postdoctoral researcher in Hinton's group at Toronto."
+    },
+    {
+      "person": "yee-whye-teh",
+      "note": "Former doctoral student of Hinton, then at the National University of Singapore, later a professor of statistics at the University of Oxford."
+    }
+  ],
+  "papers": [
+    {
+      "title": "A Fast Learning Algorithm for Deep Belief Nets",
+      "authors": ["Geoffrey E. Hinton", "Simon Osindero", "Yee-Whye Teh"],
+      "year": 2006,
+      "venue": "Neural Computation, 18(7), 1527–1554",
+      "url": "https://doi.org/10.1162/neco.2006.18.7.1527",
+      "summary": "It showed that a deep network can be trained greedily, one layer at a time, each layer learning to model the one below without labels. On handwritten digit recognition it reached 1.25 percent error, better than the other learning methods of the time that used no built-in knowledge of images. Together with related work that year, it started the revival known as deep learning."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "The problem",
+        "body": "Before 2006, deep networks trained with backpropagation from random starting weights usually got stuck or learned badly, so most people used shallow ones. The exception was convolutional networks for images, which LeCun's group had trained since 1989."
+      },
+      {
+        "heading": "Learn the first layer alone",
+        "body": "Train one restricted Boltzmann machine on the raw data, such as images of digits. Its hidden units learn simple features, like strokes, without being told what any image shows."
+      },
+      {
+        "heading": "Stack another layer",
+        "body": "Treat the first layer's hidden features as data and train a second restricted Boltzmann machine on them. It learns features of features."
+      },
+      {
+        "heading": "Each layer helps",
+        "body": "The paper proved that, under its conditions, adding a layer this way improves a guarantee on how well the whole model describes the data."
+      },
+      {
+        "heading": "Fine-tune the whole stack",
+        "body": "Finally, adjust all layers together, with a further learning pass or with backpropagation for a labelled task, starting from these sensible weights instead of random ones."
+      },
+      {
+        "heading": "Later replaced",
+        "body": "Within a few years, better starting weights, simpler neurons and much more data made layer-by-layer pre-training unnecessary. Its lasting effect was to make deep networks worth trying again."
+      }
+    ]
+  }
+}
