@@ -1,0 +1,33 @@
+{
+  "slug": "example-idea",
+  "order": 10,
+  "year": 1958,
+  "yearLabel": "1958",
+  "era": "1940s-50s",
+  "shortTitle": "Example idea",
+  "title": "An example idea used by the tests",
+  "idea": "A machine that learns from its mistakes. Each wrong answer nudges it towards the right one.",
+  "cameFrom": [
+    { "label": "Neuroscience", "note": "Brains learn by changing the links between cells." }
+  ],
+  "people": [
+    { "person": "ada-example", "note": "A test person who stands in for a real researcher." }
+  ],
+  "papers": [
+    {
+      "title": "An example paper",
+      "authors": ["Ada Example"],
+      "year": 1958,
+      "venue": "Journal of Examples",
+      "url": "https://doi.org/10.0000/example",
+      "summary": "It showed one thing. It made another thing possible."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      { "heading": "Step one", "body": "First the input arrives." },
+      { "heading": "Step two", "body": "Then it is weighed." },
+      { "heading": "Step three", "body": "Finally the output fires." }
+    ]
+  }
+}

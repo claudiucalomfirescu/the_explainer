@@ -1,0 +1,68 @@
+{
+  "slug": "artificial-neuron",
+  "order": 10,
+  "year": 1943,
+  "yearLabel": "1943",
+  "era": "1940s-50s",
+  "shortTitle": "The artificial neuron",
+  "title": "The artificial neuron",
+  "idea": "A brain cell can be described as a tiny switch: it adds up the signals arriving from its neighbours and fires only when the total is big enough. Wire enough of these switches together and they can carry out logic.",
+  "cameFrom": [
+    {
+      "label": "Neuroscience",
+      "note": "Studies of nerve cells showed that a neuron either fires fully or stays quiet, with nothing in between."
+    },
+    {
+      "label": "Formal logic (Russell and Whitehead, Carnap)",
+      "note": "The paper borrowed its notation from Principia Mathematica and from Rudolf Carnap, so a network of neurons could be read as a logical formula."
+    }
+  ],
+  "people": [
+    {
+      "person": "warren-mcculloch",
+      "note": "Neurophysiologist and psychiatrist at the University of Illinois in Chicago, who had long wanted to explain thinking in terms of nerve cells."
+    },
+    {
+      "person": "walter-pitts",
+      "note": "A largely self-taught logician, still a teenager when he started working with McCulloch, who supplied much of the paper's mathematics."
+    }
+  ],
+  "papers": [
+    {
+      "title": "A logical calculus of the ideas immanent in nervous activity",
+      "authors": ["Warren S. McCulloch", "Walter Pitts"],
+      "year": 1943,
+      "venue": "Bulletin of Mathematical Biophysics, 5(4), 115–133",
+      "url": "https://doi.org/10.1007/BF02478259",
+      "summary": "It modelled a neuron as a unit that fires when enough of its excitatory inputs are active and none of its inhibitory inputs is. It showed that networks of such units can compute any expression of logic. It gave later work a precise, mathematical neuron to build on."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Inputs are on or off",
+        "body": "Each input to the unit is either active (1) or silent (0). Time moves in discrete steps, and a signal takes one step to cross a connection."
+      },
+      {
+        "heading": "Count the active inputs",
+        "body": "The unit counts how many of its excitatory inputs are active in the current step."
+      },
+      {
+        "heading": "Compare with a threshold",
+        "body": "If the count reaches the unit's threshold, the unit fires and outputs 1 in the next step. Otherwise it outputs 0."
+      },
+      {
+        "heading": "Inhibition is a veto",
+        "body": "In the original model, a single active inhibitory input stops the unit from firing, whatever the count."
+      },
+      {
+        "heading": "Logic gates from neurons",
+        "body": "With two inputs, a threshold of 2 behaves like AND and a threshold of 1 behaves like OR. An inhibitory input gives NOT. Combine these and you can build any logical circuit."
+      },
+      {
+        "heading": "No learning yet",
+        "body": "The connections and thresholds are fixed by whoever designs the network. The model says nothing about how a network could find them by itself, which is the question Hebb and Rosenblatt took up next."
+      }
+    ]
+  }
+}

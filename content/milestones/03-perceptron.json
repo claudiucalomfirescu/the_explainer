@@ -1,0 +1,64 @@
+{
+  "slug": "perceptron",
+  "order": 30,
+  "year": 1958,
+  "yearLabel": "1958",
+  "era": "1940s-50s",
+  "shortTitle": "The perceptron",
+  "title": "The perceptron: a machine that learns",
+  "idea": "A machine that learns to sort things into two groups by trial and error. Every time it gets an example wrong, it adjusts how much weight it gives to each of its inputs.",
+  "cameFrom": [
+    {
+      "milestone": "artificial-neuron",
+      "note": "Its units are threshold neurons in the McCulloch and Pitts style, but with connection strengths that can change."
+    },
+    {
+      "milestone": "hebbian-learning",
+      "note": "Rosenblatt built on Hebb's idea that learning means changing the strength of connections."
+    }
+  ],
+  "people": [
+    {
+      "person": "frank-rosenblatt",
+      "note": "Psychologist at the Cornell Aeronautical Laboratory in Buffalo, New York, who designed the perceptron and then built it as a machine, the Mark I Perceptron."
+    }
+  ],
+  "papers": [
+    {
+      "title": "The perceptron: A probabilistic model for information storage and organization in the brain",
+      "authors": ["Frank Rosenblatt"],
+      "year": 1958,
+      "venue": "Psychological Review, 65(6), 386–408",
+      "url": "https://doi.org/10.1037/h0042519",
+      "summary": "It described a network that links sensory units to response units through adjustable connections, and showed how reinforcement could tune those connections so the network learns to recognise patterns. It treated memory as statistical: information is held in the strengths of many connections rather than stored in one place."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Weighted inputs",
+        "body": "Each input, for example one dot of a black-and-white picture, is multiplied by a weight that says how much it matters."
+      },
+      {
+        "heading": "Add up and decide",
+        "body": "The perceptron adds the weighted inputs and a bias. If the total is above zero it answers \"group A\", otherwise \"group B\"."
+      },
+      {
+        "heading": "Learn from mistakes",
+        "body": "When the answer is right, nothing changes. When it should have said A, each weight is nudged up by its input; when it should have said B, nudged down. Over many examples the weights settle."
+      },
+      {
+        "heading": "A guarantee",
+        "body": "If a straight line (or, with more inputs, a flat surface) can separate the two groups, this rule is proven to find one after a finite number of mistakes. The proof is known as the perceptron convergence theorem."
+      },
+      {
+        "heading": "A real machine",
+        "body": "The Mark I Perceptron looked at the world through a 20 by 20 grid of light sensors. Its weights were knobs turned by small electric motors as it learned."
+      },
+      {
+        "heading": "The limit",
+        "body": "One layer can only draw a straight boundary. It cannot learn \"exactly one of two inputs is on\" (XOR), the weakness Minsky and Papert pressed in 1969."
+      }
+    ]
+  }
+}

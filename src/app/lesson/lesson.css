@@ -1,0 +1,146 @@
+/* The lesson screen (REQ-19, REQ-21). The settled look from docs/concept/style-final.html: graphite
+   with signal blue, a short soft glow on lit parts only. Everything is scoped under .lesson, so the
+   card pages' light theme is untouched. Contrast (WCAG 2.2 AA) is checked by the axe tests. */
+
+.lesson {
+  --bg: #23252b;
+  --rail-bg: #1e2025;
+  --panel-bg: #27292f;
+  --card-bg: #2b2d33;
+  --ink: #eceef0;
+  --ink-soft: #a4a6ab;
+  --rule: #393b40;
+  --hover: #2f3136;
+  --accent: #5f9dff;
+  --accent-soft: #5f9dff24;
+  --accent-text: #9cc3ff; /* blue text on a blue-tinted background (AA at 12 px) */
+  --on-accent: #111418;
+  --glow: drop-shadow(0 0 3px #5f9dff) drop-shadow(0 0 6px #5f9dff4d);
+  --fig-line: #66686d;
+  --fig-faint: #45474c;
+  --fig-off: #2c2e34;
+  --mono: var(--font-mono-lesson), ui-monospace, monospace;
+
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 500px;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "rail head head"
+    "rail stage tabs"
+    "rail stage steps"
+    "rail strip strip";
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+@media (min-width: 900px) {
+  .lesson { height: 100dvh; }
+}
+.lesson :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lesson a { color: var(--accent); }
+
+/* rail */
+.lesson-rail { grid-area: rail; display: flex; flex-direction: column; gap: 4px; padding: 12px 8px; background: var(--rail-bg); border-right: 1px solid var(--rule); }
+.lesson-rail > * { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 8px; cursor: pointer; color: var(--ink-soft); font: 500 13px var(--mono); white-space: nowrap; }
+.lesson-rail > *:hover { background: var(--hover); color: var(--ink); }
+.lesson-rail > *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lesson-rail svg { width: 20px; height: 20px; flex: none; }
+.lesson-rail .lab { display: none; }
+.lesson-rail[data-open="true"] { position: relative; z-index: 3; width: 200px; box-shadow: 8px 0 24px #0006; }
+.lesson-rail[data-open="true"] .lab { display: inline; }
+
+/* header */
+.lesson-head { grid-area: head; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px 28px; border-bottom: 1px solid var(--rule); }
+.lesson-eyebrow { margin: 0 0 4px; font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.lesson-head h1 { margin: 0; font: 700 22px/1.2 var(--mono); letter-spacing: .01em; }
+.lesson-year { margin: 0; font: 700 44px/1 var(--mono); color: var(--accent); }
+
+/* stage */
+.lesson-stage { grid-area: stage; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 56px 20px 18px; min-height: 0;
+  background: radial-gradient(ellipse 60% 55% at 50% 50%, #5f9dff0f, transparent 70%), var(--bg); }
+.lesson-caption { position: absolute; top: 16px; left: 24px; right: 24px; margin: 0; font: 13px/1.45 var(--mono); color: var(--ink-soft); max-width: 640px; min-height: 1.45em; }
+.lesson-figures { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 28px 44px; }
+.lesson-figure { margin: 0; display: grid; gap: 10px; }
+.lesson-figure figcaption { display: grid; gap: 2px; font: 12px var(--mono); color: var(--ink-soft); }
+.lesson-figure figcaption strong { font: 700 16px var(--mono); color: var(--ink); }
+.lesson-net { position: relative; }
+.lesson-links { position: absolute; inset: 0; pointer-events: none; }
+.lesson-links line { stroke-width: 1; }
+.lesson-links .no { stroke: var(--fig-line); opacity: .5; }
+.lesson-links .yes { stroke: var(--accent); opacity: .9; filter: var(--glow); }
+.lesson-neuron { position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; padding: 0; border-radius: 50%; border: 1.5px solid var(--fig-line); background: var(--fig-off); cursor: pointer; transition: background-color .2s, border-color .2s; }
+.lesson-neuron:hover { border-color: var(--ink-soft); }
+.lesson-neuron[aria-pressed="true"] { background: var(--accent); border-color: #a9c9ff; filter: var(--glow); }
+.lesson-neuron[data-check] { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink); }
+.lesson-track { width: 308px; height: auto; display: block; }
+.lesson-track .ground { fill: #ffffff08; }
+.lesson-track .curve { fill: none; stroke: var(--fig-line); stroke-width: 1.6; }
+.lesson-track .axis { stroke: var(--fig-faint); }
+.lesson-track .mark { font: 12px var(--mono); fill: var(--ink-soft); text-anchor: middle; }
+.lesson-track .mark.big { font: 700 15px var(--mono); fill: var(--ink); }
+.lesson-track .ball { fill: var(--accent); stroke: #a9c9ff; stroke-width: 1.5; filter: var(--glow); transition: cx .3s ease, cy .3s ease; }
+.lesson-tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 4px; border-radius: 12px; background: var(--panel-bg); border: 1px solid var(--rule); }
+.lesson-tools button { all: unset; cursor: pointer; white-space: nowrap; padding: 7px 12px; border-radius: 8px; font: 500 12px var(--mono); color: var(--ink-soft); }
+.lesson-tools button:hover { color: var(--ink); background: var(--hover); }
+.lesson-tools button[aria-pressed="true"] { color: var(--accent-text); background: var(--accent-soft); }
+.lesson-tools button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* panel: tabs (upper) and steps (lower) */
+.lesson-tabs { grid-area: tabs; display: flex; flex-direction: column; min-height: 0; background: var(--panel-bg); border-left: 1px solid var(--rule); }
+.lesson-tablist { display: flex; flex-wrap: wrap; gap: 2px; padding: 12px 16px 0; border-bottom: 1px solid var(--rule); }
+.lesson-tablist button { all: unset; cursor: pointer; padding: 9px 10px; font: 500 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 2px solid transparent; }
+.lesson-tablist button[aria-selected="true"] { color: var(--ink); border-color: var(--accent); }
+.lesson-tablist button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.lesson-tabpanel { padding: 18px 20px; overflow: auto; font-size: 16px; line-height: 1.55; min-height: 0; }
+.lesson-tabpanel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.lesson-tabpanel p { margin: 6px 0 0; }
+.lesson-idea { font-size: 19px; line-height: 1.5; margin: 0 !important; }
+.lesson-box { border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; background: var(--card-bg); }
+.lesson-box h2 { margin: 0; font: 600 16px/1.35 var(--font-geist-sans), sans-serif; }
+.lesson-byline { font: 13px var(--mono); color: var(--ink-soft); }
+.lesson-steps { grid-area: steps; padding: 14px 16px 16px; background: var(--panel-bg); border-left: 1px solid var(--rule); border-top: 1px solid var(--rule); }
+.lesson-steps h2 { margin: 0 0 8px; display: flex; justify-content: space-between; font: 600 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.lesson-steps h2 span { font-weight: 500; }
+.lesson-steps ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.lesson-steps li button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; border-radius: 8px; font-size: 15px; }
+.lesson-steps li button:hover { background: var(--hover); }
+.lesson-steps li button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lesson-steps li button b { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--rule); font: 600 11px var(--mono); color: var(--ink-soft); }
+.lesson-steps li button[aria-current="step"] { background: var(--accent-soft); }
+.lesson-steps li button[aria-current="step"] b { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.lesson-readout { margin: 10px 0 0; font: 500 13px var(--mono); color: var(--ink-soft); }
+
+/* strip */
+.lesson-strip { grid-area: strip; display: flex; gap: 14px; padding: 12px 16px 14px; overflow-x: auto; background: var(--rail-bg); border-top: 1px solid var(--rule); }
+.lesson-era { flex: none; display: flex; flex-direction: column; gap: 6px; }
+.lesson-era > span { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.lesson-era-row { display: flex; gap: 8px; }
+.lesson-ms { box-sizing: border-box; width: 132px; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 10px; background: var(--card-bg); text-decoration: none; color: var(--ink) !important; }
+a.lesson-ms:hover { border-color: var(--ink-soft); }
+.lesson-ms .y { font: 700 13px var(--mono); }
+.lesson-ms .n { font-size: 13px; line-height: 1.25; }
+.lesson-ms[aria-current="page"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: #2b3240; }
+.lesson-ms[aria-current="page"] .y { color: var(--accent); }
+
+/* below 900 px: stack the areas; the page scrolls, the strip scrolls sideways in its own row */
+@media (max-width: 899px) {
+  .lesson {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: "rail" "head" "stage" "steps" "tabs" "strip";
+  }
+  .lesson-rail { flex-direction: row; border-right: 0; border-bottom: 1px solid var(--rule); }
+  .lesson-rail .lab { display: inline; }
+  .lesson-rail > button { display: none; }
+  .lesson-rail[data-open="true"] { width: auto; box-shadow: none; }
+  .lesson-head { padding: 12px 16px; }
+  .lesson-head h1 { font-size: 18px; }
+  .lesson-year { font-size: 30px; }
+  .lesson-stage { padding: 72px 12px 16px; }
+  .lesson-tabs, .lesson-steps { border-left: 0; }
+  .lesson-tabs { border-top: 1px solid var(--rule); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lesson-neuron, .lesson-track .ball { transition: none; }
+}

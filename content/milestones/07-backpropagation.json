@@ -1,0 +1,76 @@
+{
+  "slug": "backpropagation",
+  "order": 70,
+  "year": 1986,
+  "yearLabel": "1986",
+  "era": "1980s-revival",
+  "shortTitle": "Backpropagation",
+  "title": "Backpropagation: passing the blame backwards",
+  "idea": "A way to train networks with several layers. Measure how wrong the final answer is, then pass the blame backwards, layer by layer, so every connection learns which way to change.",
+  "cameFrom": [
+    {
+      "milestone": "perceptron",
+      "note": "Learning from mistakes, as the perceptron did, but now reaching connections deep inside the network."
+    },
+    {
+      "milestone": "perceptrons-critique",
+      "note": "It answered the critique: networks with hidden layers, now trainable, learned XOR and similar tasks that defeat one layer."
+    },
+    {
+      "label": "Earlier derivations (Linnainmaa 1970, Werbos 1974)",
+      "note": "The underlying calculation had been found before, by Seppo Linnainmaa for computer arithmetic and by Paul Werbos in his doctoral thesis. The 1986 paper showed what it could learn."
+    }
+  ],
+  "people": [
+    {
+      "person": "david-rumelhart",
+      "note": "Cognitive psychologist at the University of California, San Diego, who co-led, with James McClelland, the Parallel Distributed Processing group that revived neural network research in the 1980s."
+    },
+    {
+      "person": "geoffrey-hinton",
+      "note": "Then at Carnegie Mellon University. He went on to deep belief networks and AlexNet."
+    },
+    {
+      "person": "ronald-williams",
+      "note": "Researcher at the University of California, San Diego, later at Northeastern University, also known for the REINFORCE learning method."
+    }
+  ],
+  "papers": [
+    {
+      "title": "Learning representations by back-propagating errors",
+      "authors": ["David E. Rumelhart", "Geoffrey E. Hinton", "Ronald J. Williams"],
+      "year": 1986,
+      "venue": "Nature, 323(6088), 533–536",
+      "url": "https://doi.org/10.1038/323533a0",
+      "summary": "It showed that networks with hidden layers can be trained by sending the output error backwards through the network. The hidden units then learn useful features of the task on their own, such as family relationships in one of the paper's examples. It made the method widely known, and it became the standard way to train neural networks."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Forward pass",
+        "body": "An input flows through the layers. Each neuron adds up its weighted inputs and passes the total through a smooth squashing curve, so that small weight changes cause small output changes."
+      },
+      {
+        "heading": "Measure the error",
+        "body": "Compare the network's output with the right answer. The error is a single number: the bigger, the worse."
+      },
+      {
+        "heading": "Blame the last layer",
+        "body": "For each weight into the output layer, work out how much the error would change if that weight changed a little. This is its share of the blame."
+      },
+      {
+        "heading": "Pass the blame back",
+        "body": "Each hidden neuron's blame is the blame of the neurons it feeds, weighted by the connections between them. The chain rule of calculus repeats this layer by layer back to the input."
+      },
+      {
+        "heading": "Take a small step",
+        "body": "Move every weight a little in the direction that reduces the error. Repeat over many examples. This is gradient descent."
+      },
+      {
+        "heading": "Hidden units find features",
+        "body": "Nobody tells the hidden neurons what to represent. They end up encoding whatever features make the task easier, which is the \"representations\" in the paper's title."
+      }
+    ]
+  }
+}

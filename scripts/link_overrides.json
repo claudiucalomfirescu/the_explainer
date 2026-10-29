@@ -1,0 +1,10 @@
+{
+  "https://doi.org/10.4324/9781410612403": {
+    "reason": "Psychology Press reissue of Hebb's 1949 Wiley book; Crossref records the reissue's short title and its 2005 e-book date (fetched 2026-10-22)",
+    "record": { "title": "The Organization of Behavior", "year": 2005 }
+  },
+  "https://doi.org/10.7551/mitpress/11301.001.0001": {
+    "reason": "MIT Press 2017 reissue of the 1969 book (via the 1988 expanded edition); Crossref records the short title and the 2017 date (fetched 2026-10-22)",
+    "record": { "title": "Perceptrons", "year": 2017 }
+  }
+}

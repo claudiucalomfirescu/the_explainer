@@ -1,0 +1,76 @@
+{
+  "slug": "attention",
+  "order": 120,
+  "year": 2014,
+  "yearLabel": "2014",
+  "era": "attention-transformers",
+  "shortTitle": "Attention",
+  "title": "Attention: looking back at the right words",
+  "idea": "When translating a sentence, let the network look back at the whole original sentence and choose which words to focus on for each word it writes, instead of squeezing the sentence into one fixed summary first.",
+  "cameFrom": [
+    {
+      "milestone": "lstm",
+      "note": "The translator was built from recurrent networks with gates, a simplified cousin of LSTM."
+    },
+    {
+      "milestone": "word2vec",
+      "note": "Words go in as lists of numbers learned from data, the idea word2vec made popular."
+    },
+    {
+      "label": "Sequence-to-sequence translation (2014)",
+      "note": "Ilya Sutskever, Oriol Vinyals and Quoc Le, and separately Kyunghyun Cho and colleagues, had shown networks that read a sentence into one summary and write the translation from it."
+    }
+  ],
+  "people": [
+    {
+      "person": "dzmitry-bahdanau",
+      "note": "Young researcher in Yoshua Bengio's lab at the Université de Montréal, who proposed the attention mechanism."
+    },
+    {
+      "person": "kyunghyun-cho",
+      "note": "Postdoctoral researcher in the same lab, co-inventor of the gated recurrent unit, later a professor at New York University."
+    },
+    {
+      "person": "yoshua-bengio",
+      "note": "Professor at the Université de Montréal and founder of the Mila institute. He shared the 2018 Turing Award with Geoffrey Hinton and Yann LeCun."
+    }
+  ],
+  "papers": [
+    {
+      "title": "Neural Machine Translation by Jointly Learning to Align and Translate",
+      "authors": ["Dzmitry Bahdanau", "Kyunghyun Cho", "Yoshua Bengio"],
+      "year": 2014,
+      "venue": "ICLR 2015; arXiv:1409.0473",
+      "url": "https://arxiv.org/abs/1409.0473",
+      "summary": "It let a translation network search the source sentence for the relevant words each time it produced a word, instead of relying on one fixed summary. Translation of long sentences improved markedly, and the learned focus lined up sensibly with the matching words in the two languages."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "The bottleneck",
+        "body": "Earlier translators read the whole sentence into one fixed list of numbers and wrote the translation from that alone. Long sentences did not fit, and quality dropped as sentences grew."
+      },
+      {
+        "heading": "Keep every word",
+        "body": "The reader network keeps a list of numbers for every source word, each describing that word in its context, rather than one summary."
+      },
+      {
+        "heading": "Score each source word",
+        "body": "Before writing each target word, the writer scores every source word for how relevant it is right now, using a small learned network."
+      },
+      {
+        "heading": "Turn scores into a focus",
+        "body": "The scores are turned into weights that add up to one (a softmax). High weight means \"look here\"."
+      },
+      {
+        "heading": "Blend and write",
+        "body": "The writer takes the weighted average of the source words' numbers and uses that blend to choose the next word. The focus moves as the translation goes on."
+      },
+      {
+        "heading": "Alignment for free",
+        "body": "Nobody told the network which words match. Plotting the weights shows it lined up matching words by itself, even where the order flips: \"European Economic Area\" becomes \"zone économique européenne\" in French."
+      }
+    ]
+  }
+}

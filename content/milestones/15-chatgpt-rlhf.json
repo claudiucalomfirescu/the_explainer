@@ -1,0 +1,69 @@
+{
+  "slug": "chatgpt-rlhf",
+  "order": 150,
+  "year": 2022,
+  "yearLabel": "2022",
+  "era": "scale",
+  "shortTitle": "ChatGPT and human feedback",
+  "title": "ChatGPT and learning from human feedback (RLHF)",
+  "idea": "A language model learns to be a helpful assistant from people who rank its answers: a second model learns their preferences, and the first is trained to please it. ChatGPT, released in November 2022, put this kind of assistant in front of millions of people.",
+  "cameFrom": [
+    {
+      "milestone": "gpt-scaling",
+      "note": "The starting point is a large pre-trained GPT model, which can write fluently but does not reliably do what it is asked."
+    },
+    {
+      "label": "Learning from human preferences (Christiano and colleagues, 2017)",
+      "note": "Researchers at OpenAI and DeepMind had trained agents from people's choices between pairs of behaviours. OpenAI later used the method to train summaries (2020)."
+    },
+    {
+      "label": "Reinforcement learning (PPO, 2017)",
+      "note": "A standard method for improving a system by trial and reward, used here with the learned preferences as the reward."
+    }
+  ],
+  "people": [
+    {
+      "person": "long-ouyang",
+      "note": "Researcher at OpenAI and first author of the InstructGPT paper, which described the method behind ChatGPT."
+    }
+  ],
+  "moreAuthors": true,
+  "papers": [
+    {
+      "title": "Training language models to follow instructions with human feedback",
+      "authors": ["Long Ouyang", "Jeff Wu", "Xu Jiang", "Diogo Almeida", "Carroll L. Wainwright", "and 15 more authors"],
+      "year": 2022,
+      "venue": "Advances in Neural Information Processing Systems 35 (NeurIPS 2022); arXiv:2203.02155",
+      "url": "https://arxiv.org/abs/2203.02155",
+      "summary": "It fine-tuned GPT-3 with written demonstrations and with people's rankings of its answers, producing models called InstructGPT. People preferred the answers of a 1.3 billion parameter InstructGPT model to those of the original 175 billion parameter GPT-3. OpenAI trained ChatGPT later that year with the same methods, adapted for conversation."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Start from a big model",
+        "body": "A pre-trained GPT model already knows a lot about language, but it continues text rather than answering the request."
+      },
+      {
+        "heading": "Show it good answers",
+        "body": "People write example answers to a range of prompts, and the model is fine-tuned to imitate them."
+      },
+      {
+        "heading": "Ask people to rank",
+        "body": "The model writes several answers to the same prompt and people rank them from best to worst. Ranking is easier and more consistent than writing."
+      },
+      {
+        "heading": "Learn the preferences",
+        "body": "A second network, the reward model, is trained to predict which answer people would prefer, giving any answer a score."
+      },
+      {
+        "heading": "Optimise against the scores",
+        "body": "The language model is trained with reinforcement learning (PPO) to write answers the reward model scores highly. A penalty keeps it from drifting too far from its starting point, which would let it exploit quirks of the reward model."
+      },
+      {
+        "heading": "Limits",
+        "body": "The model learns what raters prefer, which is not the same as what is true. It can still state falsehoods confidently, and it inherits the raters' blind spots."
+      }
+    ]
+  }
+}

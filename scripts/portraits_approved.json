@@ -1,0 +1,134 @@
+[
+  {
+    "id": "walter-pitts",
+    "file": "1954 Walter Pitts and a blackboard.jpg",
+    "author": "Francis Bello",
+    "crop": [
+      0.34,
+      0.12,
+      0.82,
+      0.52
+    ]
+  },
+  {
+    "id": "marvin-minsky",
+    "file": "Marvin Minsky at OLPCb (3x4 cropped).jpg",
+    "author": "Sethwoodworth (English Wikipedia)",
+    "crop": [
+      0.05,
+      0.0,
+      0.85,
+      0.75
+    ]
+  },
+  {
+    "id": "seymour-papert",
+    "file": "Papert.jpg",
+    "author": "ak_mardini",
+    "crop": [
+      0.1,
+      0.1,
+      0.9,
+      1.0
+    ]
+  },
+  {
+    "id": "john-hopfield",
+    "file": "John Hopfield 2016.jpg",
+    "author": "bhadeshia123",
+    "crop": [
+      0.1,
+      0.0,
+      0.9,
+      0.75
+    ]
+  },
+  {
+    "id": "geoffrey-hinton",
+    "file": "Geoffrey Hinton in 2026.jpg",
+    "author": "Cmichel67",
+    "crop": [
+      0.1,
+      0.0,
+      0.9,
+      0.7
+    ]
+  },
+  {
+    "id": "david-rumelhart",
+    "file": "DavidRumelhart-IJCNNseattle1991-07-08.jpg",
+    "author": "Rolf Kickuth",
+    "crop": [
+      0.02,
+      0.0,
+      0.58,
+      0.6
+    ]
+  },
+  {
+    "id": "sepp-hochreiter",
+    "file": "Sepp Hochreiter - Buch Wien 2025.JPG",
+    "author": "C.Stadler/Bwag",
+    "crop": [
+      0.25,
+      0.05,
+      0.8,
+      0.95
+    ]
+  },
+  {
+    "id": "jurgen-schmidhuber",
+    "file": "Jürgen Schmidhuber, 2017 (cropped).jpg",
+    "author": "ITU/R.Farrell",
+    "crop": [
+      0.0,
+      0.0,
+      1.0,
+      0.8
+    ]
+  },
+  {
+    "id": "tomas-mikolov",
+    "file": "Tomáš Mikolov (2020).jpg",
+    "author": "Jindřich Nosek (NoJin)",
+    "crop": [
+      0.1,
+      0.05,
+      0.9,
+      0.85
+    ]
+  },
+  {
+    "id": "kyunghyun-cho",
+    "file": "SD 2025 - Kyunghyun Cho 02 (cropped).jpg",
+    "author": "Xuthoria",
+    "crop": [
+      0.0,
+      0.0,
+      1.0,
+      0.8
+    ]
+  },
+  {
+    "id": "yoshua-bengio",
+    "file": "Yoshua Bengio 2019 cropped.jpg",
+    "author": "Maryse Boyce",
+    "crop": [
+      0.1,
+      0.0,
+      0.85,
+      0.75
+    ]
+  },
+  {
+    "id": "jared-kaplan",
+    "file": "Jared Kaplan (cropped).jpg",
+    "author": "TechCrunch",
+    "crop": [
+      0.15,
+      0.1,
+      0.85,
+      0.95
+    ]
+  }
+]

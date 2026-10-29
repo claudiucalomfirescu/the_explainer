@@ -1,0 +1,69 @@
+{
+  "slug": "hopfield",
+  "order": 50,
+  "year": 1982,
+  "yearLabel": "1982",
+  "era": "1980s-revival",
+  "shortTitle": "The Hopfield network",
+  "title": "The Hopfield network: memory as a valley",
+  "idea": "A network that stores memories as stable patterns. Give it a damaged or partial version of a memory and it settles, step by step, back to the complete original.",
+  "cameFrom": [
+    {
+      "milestone": "hebbian-learning",
+      "note": "The connection strengths are set with Hebb's rule: neurons that are active together in a memory get a stronger link."
+    },
+    {
+      "label": "Physics of disordered magnets (spin glasses)",
+      "note": "Hopfield, a physicist, saw that his network behaves like a model of a disordered magnet: it always moves downhill in an energy and comes to rest."
+    },
+    {
+      "label": "Earlier memory networks (Amari 1972, Little 1974)",
+      "note": "Shun-ichi Amari and William Little had studied similar networks of threshold neurons with feedback. Hopfield's energy picture made their behaviour easy to analyse."
+    }
+  ],
+  "people": [
+    {
+      "person": "john-hopfield",
+      "note": "Physicist at Caltech and Bell Labs who brought the tools of statistical physics to neural networks. He shared the 2024 Nobel Prize in Physics with Geoffrey Hinton."
+    }
+  ],
+  "papers": [
+    {
+      "title": "Neural networks and physical systems with emergent collective computational abilities",
+      "authors": ["John J. Hopfield"],
+      "year": 1982,
+      "venue": "Proceedings of the National Academy of Sciences, 79(8), 2554–2558",
+      "url": "https://doi.org/10.1073/pnas.79.8.2554",
+      "summary": "It showed that a network of on/off neurons with symmetric connections has an energy that can only fall as neurons update, so the network always settles into a stable state. Memories stored as those stable states can be recalled from partial or noisy cues. It estimated that such a network holds about 0.15 memories per neuron before recall starts to fail."
+    }
+  ],
+  "deeper": {
+    "visual": "hopfield",
+    "steps": [
+      {
+        "heading": "Neurons and links",
+        "body": "Each neuron is either +1 or −1. Every neuron is linked to every other, the link from A to B has the same strength as from B to A, and no neuron links to itself."
+      },
+      {
+        "heading": "Storing a memory",
+        "body": "For each pattern to remember, add 1 to the link between two neurons if they agree in that pattern and subtract 1 if they disagree. This is Hebb's rule."
+      },
+      {
+        "heading": "Updating one neuron",
+        "body": "Pick a neuron and add up the strengths of its links, each multiplied by the state of the neuron at the other end. If the total is positive the neuron becomes +1, if negative −1."
+      },
+      {
+        "heading": "Energy only goes down",
+        "body": "The network has an energy: minus half the sum, over every pair, of link strength × state × state. Each update lowers it or leaves it unchanged, so the network must eventually stop changing."
+      },
+      {
+        "heading": "Recall is rolling downhill",
+        "body": "Stored memories sit at the bottom of valleys in that energy. Start from a damaged memory and the network rolls into the nearest valley, which is usually the original."
+      },
+      {
+        "heading": "Limits",
+        "body": "Store too many patterns, more than about 0.15 per neuron by the paper's estimate, and the valleys run into each other. The network then settles into blends that were never stored."
+      }
+    ]
+  }
+}

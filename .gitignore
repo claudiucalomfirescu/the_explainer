@@ -1,0 +1,24 @@
+# Dependencies and builds
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+test-results/
+playwright-report/
+# Generated outputs
+reports/
+# Backups of tracked files
+**/archive/
+# Per-session captures
+sessions/session-insights-*
+sessions/chat-summary-*
+sessions/audit-report-*
+# Handover snapshots
+handovers/
+# Local env
+.env*.local
+.vercel
+# OS / editor junk
+.DS_Store
+*.log

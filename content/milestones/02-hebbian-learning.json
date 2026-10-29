@@ -1,0 +1,60 @@
+{
+  "slug": "hebbian-learning",
+  "order": 20,
+  "year": 1949,
+  "yearLabel": "1949",
+  "era": "1940s-50s",
+  "shortTitle": "Hebbian learning",
+  "title": "Hebbian learning: cells that fire together wire together",
+  "idea": "When one brain cell keeps helping another to fire, the link between them grows stronger. Learning, in this view, is the slow strengthening of connections that get used together.",
+  "cameFrom": [
+    {
+      "label": "Neuroscience and psychology",
+      "note": "Hebb had worked with the surgeon Wilder Penfield on patients after brain operations and with Karl Lashley on vision in rats, and wanted a theory that linked behaviour to brain cells."
+    }
+  ],
+  "people": [
+    {
+      "person": "donald-hebb",
+      "note": "Canadian psychologist at McGill University in Montreal who tied learning and memory to the way brain cells are wired together."
+    }
+  ],
+  "papers": [
+    {
+      "title": "The Organization of Behavior: A Neuropsychological Theory",
+      "authors": ["Donald O. Hebb"],
+      "year": 1949,
+      "publisher": "John Wiley & Sons, New York (book; reissued by Psychology Press)",
+      "url": "https://doi.org/10.4324/9781410612403",
+      "summary": "The book proposed that cells which repeatedly fire together become linked into cell assemblies that hold a memory or an idea. Its learning rule, stated in words rather than equations, became the template for adjusting connection strengths in artificial networks."
+    }
+  ],
+  "deeper": {
+    "steps": [
+      {
+        "heading": "Two cells and a link",
+        "body": "Cell A sends signals to cell B through a connection, and the connection has a strength."
+      },
+      {
+        "heading": "Use strengthens the link",
+        "body": "When A is active and takes part in making B fire, the strength of the connection from A to B grows."
+      },
+      {
+        "heading": "Written as a formula",
+        "body": "Later researchers wrote the rule as: change in strength = learning rate × activity of A × activity of B. Hebb himself gave no formula."
+      },
+      {
+        "heading": "Cell assemblies",
+        "body": "Groups of cells that keep firing together become wired into an assembly. Switching on part of the assembly can switch on the rest, which is how a whole memory could come back from a fragment."
+      },
+      {
+        "heading": "The catch",
+        "body": "Strengthening alone only ever grows, so connection strengths run away unless something holds them back. Later learning rules added decay or normalisation."
+      },
+      {
+        "heading": "The slogan came later",
+        "body": "The phrase \"cells that fire together wire together\" is a later summary, usually credited to the neuroscientist Carla Shatz in 1992. Hebb's own wording is longer and more careful about timing: A must help to cause B's firing."
+      }
+    ]
+  }
+}
