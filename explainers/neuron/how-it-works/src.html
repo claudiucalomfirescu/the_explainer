@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Neuron, Animated</title>
+<style>
+:root{
+  --bg:#0b1730; --panel:#0f1e3d; --line:#e8e6df; --dim:#5a6b8c; --muted:#93a1bd;
+  --teal:#2ec4b6; --coral:#ff6b5b; --text:#e8e6df;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter","Helvetica Neue",Arial,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+#wrap{width:100%;max-width:1200px}
+#viewport{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--bg);border:1px solid #1d2c4d;border-radius:6px}
+#stage{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0}
+#stage svg{position:absolute;left:0;top:0}
+.lbl{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:24px;letter-spacing:.02em;color:var(--muted)}
+.lbl.name{font-size:22px;text-transform:lowercase}
+.lbl.val{font-size:28px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:500}
+.lbl.small{font-size:20px}
+.lbl.teal{color:var(--teal)} .lbl.coral{color:var(--coral)}
+.cap{position:absolute;left:800px;top:820px;transform:translate(-50%,-50%);font-size:34px;color:var(--text);white-space:nowrap;opacity:0}
+.title{position:absolute;left:60px;top:50px;font-size:22px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+#controls{display:flex;gap:12px;align-items:center;margin-top:12px}
+#controls button{background:var(--panel);color:var(--text);border:1px solid #2a3b60;border-radius:4px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+#controls button:hover{border-color:var(--teal)}
+#scrub{flex:1;accent-color:var(--teal)}
+#time{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);min-width:80px;text-align:right}
+#chapters{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+#chapters button{background:transparent;color:var(--muted);border:1px solid #24355a;border-radius:999px;padding:4px 10px;font-size:13px;cursor:pointer}
+#chapters button.on{color:var(--bg);background:var(--teal);border-color:var(--teal)}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="viewport"><div id="stage">
+    <svg id="svg" width="1600" height="900" viewBox="0 0 1600 900"></svg>
+    <div class="title">How one artificial neuron works</div>
+  </div></div>
+  <div id="controls">
+    <button id="play">Play</button>
+    <input id="scrub" type="range" min="0" max="1000" value="0">
+    <span id="time">0.0 / 0.0 s</span>
+  </div>
+  <div id="chapters"></div>
+</div>
+
+<script>/*GSAP*/</script>
+<script>
+// ---------- state model (from mechanism.md, computed in Python) ----------
+const S = {
+  names:["sunny","free time","tired"],
+  x1:[1.0,0.8,0.9], x2:[1.0,0.8,0.1],
+  w:[0.6,0.5,-0.7], bias:-0.1,
+  run1:{p:[0.60,0.40,-0.63], partial:[0.60,1.00,0.37], total:0.27, out:0.57},
+  run2:{p:[0.60,0.40,-0.07], partial:[0.60,1.00,0.93], total:0.83, out:0.70}
+};
+const sig = z => 1/(1+Math.exp(-z));
+
+// ---------- geometry (layout table in visual-script.md) ----------
+const NS="http://www.w3.org/2000/svg", svg=document.getElementById("svg"), stage=document.getElementById("stage");
+const C={line:"#e8e6df",dim:"#5a6b8c",teal:"#2ec4b6",coral:"#ff6b5b"};
+function el(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);svg.appendChild(e);return e}
+function lbl(text,x,y,cls=""){const d=document.createElement("div");d.className="lbl "+cls;d.style.left=x+"px";d.style.top=y+"px";d.textContent=text;d.style.opacity=0;stage.appendChild(d);return d}
+const fmt=v=>(v<0?"−":"")+Math.abs(v).toFixed(2);
+
+const IN=[{x:250,y:250},{x:250,y:450},{x:250,y:650}], R=38;
+const NB={x:620,y:300,w:560,h:300};
+const ENTRY=[{x:620,y:390},{x:620,y:450},{x:620,y:510}];
+const OUT={x:1390,y:450};
+const BAR={x:735,w:40,y0:540,k:180}, barY=v=>BAR.y0-BAR.k*v;
+const AX={x0:940,x1:1150,y0:560,y1:350,zmin:-3,zmax:3};
+const zx=z=>AX.x0+(z-AX.zmin)/(AX.zmax-AX.zmin)*(AX.x1-AX.x0), vy=v=>AX.y0-v*(AX.y0-AX.y1);
+const BIAS_REST=668;
+
+const conn=IN.map((p,i)=>el("line",{x1:p.x+R,y1:p.y,x2:p.x+R,y2:p.y,stroke:C.dim,"stroke-width":1.5,"stroke-linecap":"round"}));
+const body=el("rect",{x:NB.x,y:NB.y,width:NB.w,height:NB.h,rx:40,fill:"none",stroke:C.line,"stroke-width":1.5,"stroke-dasharray":1800,"stroke-dashoffset":1800});
+const divider=el("line",{x1:900,y1:NB.y+30,x2:900,y2:NB.y+NB.h-30,stroke:C.dim,"stroke-width":1,"stroke-dasharray":"4 6",opacity:0});
+const barFrame=el("rect",{x:BAR.x,y:barY(1.15),width:BAR.w,height:BAR.k*1.15,fill:"none",stroke:C.dim,"stroke-width":1,opacity:0});
+const barZero=el("line",{x1:BAR.x-10,y1:BAR.y0,x2:BAR.x+BAR.w+10,y2:BAR.y0,stroke:C.dim,"stroke-width":1,opacity:0});
+const bar=el("rect",{x:BAR.x,y:BAR.y0,width:BAR.w,height:0,fill:C.teal,opacity:.85});
+const biasTab=el("rect",{x:BAR.x-6,y:BIAS_REST,width:BAR.w+12,height:10,rx:2,fill:C.coral,opacity:0});
+let d="";for(let i=0;i<=60;i++){const z=AX.zmin+i/60*(AX.zmax-AX.zmin);d+=(i?"L":"M")+zx(z).toFixed(1)+" "+vy(sig(z)).toFixed(1)}
+const axes=el("path",{d:`M${AX.x0} ${AX.y0} L${AX.x1} ${AX.y0} M${zx(0)} ${AX.y0} L${zx(0)} ${AX.y1-10} M${zx(0)-6} ${vy(.5)} L${zx(0)+6} ${vy(.5)}`,stroke:C.dim,"stroke-width":1,fill:"none",opacity:0});
+const curve=el("path",{d,stroke:C.line,"stroke-width":2,fill:"none","stroke-dasharray":400,"stroke-dashoffset":400});
+const dashH=el("line",{x1:0,y1:0,x2:0,y2:0,stroke:C.teal,"stroke-width":1.5,"stroke-dasharray":"5 5",opacity:0});
+const ghost=el("circle",{cx:zx(AX.zmin),cy:vy(sig(AX.zmin)),r:7,fill:C.line,opacity:0});
+const dot=el("circle",{cx:zx(AX.zmin),cy:AX.y0,r:9,fill:C.teal,opacity:0});
+const outLine=el("line",{x1:NB.x+NB.w,y1:OUT.y,x2:NB.x+NB.w,y2:OUT.y,stroke:C.dim,"stroke-width":1.5});
+const outNode=el("circle",{cx:OUT.x,cy:OUT.y,r:0,fill:C.teal,"fill-opacity":0,stroke:C.line,"stroke-width":1.5});
+const inNode=IN.map(p=>el("circle",{cx:p.x,cy:p.y,r:0,fill:C.teal,"fill-opacity":0,stroke:C.line,"stroke-width":1.5}));
+const pulse=IN.map((p,i)=>el("circle",{cx:p.x+R,cy:p.y,r:10,fill:i===2?C.coral:C.teal,opacity:0}));
+const outPulse=el("circle",{cx:NB.x+NB.w,cy:OUT.y,r:12,fill:C.teal,opacity:0});
+
+const Lname=IN.map((p,i)=>lbl(S.names[i],p.x-110,p.y,"name"));
+const Lin=IN.map(p=>lbl("0.00",p.x,p.y+68,"val"));
+const Lw=IN.map((p,i)=>{const e=ENTRY[i];return lbl("weight "+fmt(S.w[i]),(p.x+R+e.x)/2,(p.y+e.y)/2-(i===2?-40:40),"small "+(S.w[i]<0?"coral":"teal"))});
+const Lconn=lbl("connections",(IN[1].x+R+ENTRY[1].x)/2,IN[1].y-30,"name");
+const Lneuron=lbl("neuron",900,272,"name");
+const Lout=lbl("go for a run?",OUT.x,OUT.y-72,"name");
+const LoutV=lbl("0.00",OUT.x,OUT.y+72,"val");
+const Lbefore=lbl("before 0.57",OUT.x,OUT.y+112,"small");
+const Lp=ENTRY.map((e,i)=>lbl(fmt(S.run1.p[i]),e.x+50,e.y,"val small "+(i===2?"coral":"teal")));
+const Ladd=lbl("add up",BAR.x+BAR.w/2,NB.y+NB.h+28,"name");
+const Lsq=lbl("squeeze",1045,NB.y+NB.h+28,"name");
+const Ltot=lbl("0.00",BAR.x+BAR.w+60,BAR.y0,"val");
+const Lbias=lbl("bias −0.10",BAR.x+BAR.w/2,BIAS_REST+32,"small coral");
+const LzIn=lbl("in 0.27",zx(0.27),AX.y0+26,"small");
+const LzOut=lbl("out 0.57",AX.x1-20,vy(sig(.27))-24,"small teal");
+const LzIn2=lbl("in 0.83",zx(0.83),AX.y0+26,"small");
+const LzOut2=lbl("out 0.70",AX.x1-20,vy(sig(.83))-24,"small teal");
+const caps={};
+function cap(key,text){const c=document.createElement("div");c.className="cap";c.textContent=text;stage.appendChild(c);caps[key]=c;return c}
+
+// ---------- timeline: one paused master, one label per beat ----------
+gsap.defaults({ease:"power2.inOut"});
+const tl=gsap.timeline({paused:true});
+const beats=[];
+function beat(id,name,start,dur,caption,keep){tl.addLabel(id,start);beats.push({id,name,start,dur});const c=cap(id,caption);tl.to(c,{opacity:1,duration:.4},start+.2);if(!keep)tl.to(c,{opacity:0,duration:.3},start+dur-.35)}
+function count(lab,from,to,dur,pos){const o={v:from};tl.fromTo(o,{v:from},{v:to,duration:dur,ease:"power1.inOut",immediateRender:false,onUpdate:()=>lab.textContent=fmt(o.v)},pos)}
+const show=(t,pos,dur=.4,op=1)=>tl.to(t,{opacity:op,duration:dur},pos);
+const hide=(t,pos,dur=.3)=>tl.to(t,{opacity:0,duration:dur},pos);
+function barTo(from,to,dur,pos){tl.fromTo(bar,{attr:{y:barY(from),height:BAR.k*from}},{attr:{y:barY(to),height:BAR.k*to},duration:dur,immediateRender:false},pos);tl.fromTo(Ltot,{top:barY(from)},{top:barY(to),duration:dur,immediateRender:false},pos);count(Ltot,from,to,dur,pos)}
+function travel(run,t0,dur){pulse.forEach((p,i)=>{const sc=Math.abs(run.p[i])/0.63;
+  tl.fromTo(p,{attr:{cx:IN[i].x+R,cy:IN[i].y,r:5+9*sc},opacity:0},{opacity:.25+.75*sc,duration:.15,immediateRender:false},t0);
+  tl.to(p,{attr:{cx:ENTRY[i].x,cy:ENTRY[i].y},duration:dur,ease:"none"},t0);tl.to(p,{opacity:0,duration:.25},t0+dur)})}
+function outFlow(t0,dur,from,to){tl.fromTo(outPulse,{attr:{cx:NB.x+NB.w},opacity:0},{opacity:1,duration:.1,immediateRender:false},t0);
+  tl.to(outPulse,{attr:{cx:OUT.x-R},duration:dur,ease:"none"},t0);tl.to(outPulse,{opacity:0,duration:.2},t0+dur);
+  tl.fromTo(outNode,{attr:{"fill-opacity":from*.85}},{attr:{"fill-opacity":to*.85},duration:.6,immediateRender:false},t0+dur);count(LoutV,from,to,.6,t0+dur)}
+
+// Beat 1 - the parts (0-7)
+beat("b1","The parts",0,7,"A neuron takes several inputs and gives one output.");
+inNode.forEach((n,i)=>{tl.to(n,{attr:{r:R},duration:.4,ease:"back.out(1.6)"},.3+i*.25);show(Lname[i],.4+i*.25)});
+conn.forEach((c,i)=>tl.to(c,{attr:{x2:ENTRY[i].x,y2:ENTRY[i].y},duration:.8},1.3));show(Lconn,1.7);
+tl.to(body,{attr:{"stroke-dashoffset":0},duration:1.2},2.3);show(Lneuron,2.8);
+show([divider,Ladd,Lsq],3.6,.5);show(biasTab,3.8,.4,.3);show(Lbias,3.8,.4,.5);
+tl.to(outLine,{attr:{x2:OUT.x-R},duration:.5},4.3);tl.to(outNode,{attr:{r:R},duration:.4,ease:"back.out(1.6)"},4.7);show(Lout,4.8);
+
+// Beat 2 - signals become numbers (7-12)
+beat("b2","Signals become numbers",7,5,"Each input is a number between 0 and 1.");
+inNode.forEach((n,i)=>{const t=7.6+i*.3;show(Lin[i],t,.2);tl.to(n,{attr:{"fill-opacity":S.x1[i]*.85},duration:1},t);count(Lin[i],0,S.x1[i],1,t)});
+
+// Beat 3 - weights (12-19)
+beat("b3","Not all inputs count the same",12,7,"Each connection has a weight. Coral means it pushes against.");
+hide(Lconn,12.4);
+[0.8,1.4,2.6].forEach((dt,i)=>{const t=12+dt;tl.to(conn[i],{attr:{"stroke-width":Math.abs(S.w[i])*14,stroke:S.w[i]<0?C.coral:C.teal},duration:.7},t);show(Lw[i],t+.2)});
+
+// Beat 4 - weighting (19-26)
+beat("b4","Weighting the inputs",19,7,"Each input is multiplied by its weight.");
+travel(S.run1,19.6,1.5);show(Lp,21.2,.3);
+
+// Beat 5 - adding up (26-30)
+beat("b5","Adding up",26,4,"The neuron adds up the weighted inputs.");
+tl.to([barFrame,barZero],{opacity:1,duration:.3},26.1);show(Ltot,26.1,.3);
+S.run1.partial.forEach((v,i)=>{const t=26.5+i*.8;tl.to(Lp[i],{opacity:.25,duration:.3},t);barTo(i?S.run1.partial[i-1]:0,v,.6,t)});
+
+// Beat 6 - bias (30-34)
+beat("b6","The bias",30,4,"Then a bias: a built-in nudge before any input.");
+show(biasTab,30.3,.3);show(Lbias,30.3,.3);
+tl.to(biasTab,{attr:{y:barY(S.run1.partial[2])-5},duration:.7},30.7);
+barTo(S.run1.partial[2],S.run1.total,.6,31.5);tl.to(biasTab,{attr:{y:barY(S.run1.total)-5},duration:.6},31.5);
+tl.to(biasTab,{opacity:0,duration:.3},32.4);tl.to(biasTab,{attr:{y:BIAS_REST},duration:.01},32.8);tl.to(biasTab,{opacity:.3,duration:.3},32.9);
+
+// Beat 7 - squeeze (34-41)
+beat("b7","Squeezing the total",34,7,"The activation squeezes any total into 0 to 1.");
+tl.to(axes,{opacity:1,duration:.4},34.2);tl.to(curve,{attr:{"stroke-dashoffset":0},duration:1},34.3);
+tl.to(ghost,{opacity:.5,duration:.2},35.4);
+(()=>{const o={z:AX.zmin};tl.fromTo(o,{z:AX.zmin},{z:AX.zmax,duration:1.5,ease:"none",immediateRender:false,onUpdate:()=>{ghost.setAttribute("cx",zx(o.z));ghost.setAttribute("cy",vy(sig(o.z)))}},35.5)})();
+tl.to(ghost,{opacity:0,duration:.3},37);
+tl.to(dot,{opacity:1,duration:.2},37.2);tl.to(dot,{attr:{cx:zx(S.run1.total)},duration:.9},37.3);show(LzIn,37.9,.3);
+tl.to(dot,{attr:{cy:vy(sig(S.run1.total))},duration:.7},38.3);
+tl.fromTo(dashH,{attr:{x1:zx(S.run1.total),x2:zx(S.run1.total),y1:vy(sig(S.run1.total)),y2:vy(sig(S.run1.total))},opacity:1},{attr:{x2:AX.x1+10},duration:.5,immediateRender:false},39);
+show(LzOut,39.4,.3);
+
+// Beat 8 - output (41-46)
+beat("b8","One output",41,5,"Output 0.57: slightly in favour of going for a run.");
+show(LoutV,41.6,.2);outFlow(41.4,.9,0,S.run1.out);
+
+// Beat 9 - change one input (46-56)
+beat("b9","Change one input",46,10,"Rested? Same weights, different answer: 0.70.");
+show(Lbefore,46.2,.3,.7);
+tl.to(inNode[2],{attr:{"fill-opacity":S.x2[2]*.85},duration:.5},46.5);count(Lin[2],S.x1[2],S.x2[2],.5,46.5);
+// reset
+barTo(S.run1.total,0,.3,47.1);hide([LzIn,LzOut,dashH],47.1);tl.to(dot,{attr:{cx:zx(AX.zmin),cy:AX.y0},duration:.3},47.1);
+tl.to(Lp,{opacity:0,duration:.2},47.1);count(Lp[2],S.run1.p[2],S.run2.p[2],.01,47.35);
+// replay
+travel(S.run2,47.5,.8);show(Lp,48.35,.2);
+S.run2.partial.forEach((v,i)=>{const t=48.8+i*.45;tl.to(Lp[i],{opacity:.25,duration:.2},t);barTo(i?S.run2.partial[i-1]:0,v,.35,t)});
+show(biasTab,50.2,.15);tl.to(biasTab,{attr:{y:barY(S.run2.partial[2])-5},duration:.35},50.3);
+barTo(S.run2.partial[2],S.run2.total,.35,50.7);tl.to(biasTab,{attr:{y:barY(S.run2.total)-5},duration:.35},50.7);hide(biasTab,51.1,.2);
+tl.to(dot,{attr:{cx:zx(S.run2.total)},duration:.5},51.2);show(LzIn2,51.5,.2);
+tl.to(dot,{attr:{cy:vy(sig(S.run2.total))},duration:.4},51.7);
+tl.fromTo(dashH,{attr:{x1:zx(S.run2.total),x2:zx(S.run2.total),y1:vy(sig(S.run2.total)),y2:vy(sig(S.run2.total))},opacity:1},{attr:{x2:AX.x1+10},duration:.3,immediateRender:false},52.1);
+show(LzOut2,52.3,.2);
+outFlow(52.4,.5,S.run1.out,S.run2.out);
+const finalCap=cap("b9b","Weigh, add with a bias, squeeze: that is one neuron.");
+tl.to(caps.b9,{opacity:0,duration:.3},53.7);tl.to(finalCap,{opacity:1,duration:.4},54);
+tl.to({},{duration:1.6},54.4); // hold to 56.0
+
+// ---------- player ----------
+const vp=document.getElementById("viewport");
+function fit(){stage.style.transform=`scale(${vp.clientWidth/1600})`}
+new ResizeObserver(fit).observe(vp);fit();
+const playBtn=document.getElementById("play"),scrub=document.getElementById("scrub"),time=document.getElementById("time"),chap=document.getElementById("chapters");
+const D=tl.duration();
+const seek=t=>{tl.pause();tl.seek(t,false);sync()};   // false: run onUpdate so number labels follow scrubbing
+beats.forEach((b,i)=>{const bt=document.createElement("button");bt.textContent=(i+1)+". "+b.name;bt.onclick=()=>{seek(b.start);tl.play()};b.btn=bt;chap.appendChild(bt)});
+function sync(){const t=tl.time();scrub.value=Math.round(t/D*1000);time.textContent=t.toFixed(1)+" / "+D.toFixed(1)+" s";playBtn.textContent=tl.isActive()?"Pause":(t>=D?"Replay":"Play");beats.forEach(b=>b.btn.classList.toggle("on",t>=b.start&&t<b.start+b.dur))}
+tl.eventCallback("onUpdate",sync);tl.eventCallback("onComplete",sync);
+playBtn.onclick=()=>{if(tl.time()>=D)tl.restart();else if(tl.isActive())tl.pause();else tl.play();sync()};
+scrub.oninput=()=>seek(scrub.value/1000*D);
+window.__seek=t=>{seek(t)};window.__beats=beats.map(b=>({id:b.id,start:b.start,dur:b.dur}));
+sync();
+if(!new URLSearchParams(location.search).has("still"))setTimeout(()=>tl.play(),600);
+</script>
+</body>
+</html>

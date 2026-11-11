@@ -7,7 +7,8 @@ import { describe, expect, test } from "vitest";
 const read = (p) => (fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "");
 
 describe("GitHub Pages workflow", () => {
-  const wf = read(".github/workflows/pages.yml");
+  // The workflow lives at the repository root, one level above timeline/.
+  const wf = read("../.github/workflows/pages.yml");
 
   test("exists, runs on push to main and by hand", () => {
     // REQ-18
@@ -24,6 +25,10 @@ describe("GitHub Pages workflow", () => {
     expect(wf).toMatch(/pnpm build/);
   });
 
+  test("builds from the timeline/ folder", () => {
+    expect(wf).toMatch(/working-directory:\s*timeline/);
+  });
+
   test("runs the unit tests before publishing", () => {
     // REQ-18
     expect(wf.indexOf("pnpm test")).toBeGreaterThan(-1);
@@ -33,7 +38,7 @@ describe("GitHub Pages workflow", () => {
   test("publishes out/ with .nojekyll through the official Pages actions", () => {
     // REQ-18
     expect(wf).toMatch(/touch out\/\.nojekyll/);
-    expect(wf).toMatch(/actions\/upload-pages-artifact@v\d+[\s\S]*path:\s*\.?\/?out\/?\s*$/m);
+    expect(wf).toMatch(/actions\/upload-pages-artifact@v\d+[\s\S]*path:\s*(timeline\/)?\.?\/?out\/?\s*$/m);
     expect(wf).toContain("actions/deploy-pages@");
     expect(wf).toMatch(/pages:\s*write/);
     expect(wf).toMatch(/id-token:\s*write/);
